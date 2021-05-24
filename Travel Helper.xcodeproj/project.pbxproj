@@ -12,25 +12,23 @@
 		404C6E8726565BC2002A6A68 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 404C6E8526565BC2002A6A68 /* Main.storyboard */; };
 		404C6E8926565BC3002A6A68 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 404C6E8826565BC3002A6A68 /* Assets.xcassets */; };
 		404C6E8C26565BC3002A6A68 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 404C6E8A26565BC3002A6A68 /* LaunchScreen.storyboard */; };
-		404C6EA226565BC3002A6A68 /* Travel_HelperUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 404C6EA126565BC3002A6A68 /* Travel_HelperUITests.swift */; };
 		404C6EB726565C89002A6A68 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 404C6EB626565C89002A6A68 /* Constants.swift */; };
-		404C6EB926565CA4002A6A68 /* ExchangeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 404C6EB826565CA4002A6A68 /* ExchangeRequest.swift */; };
+		404C6EB926565CA4002A6A68 /* ExchangeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 404C6EB826565CA4002A6A68 /* ExchangeService.swift */; };
 		404C6EBB26565CC8002A6A68 /* JSONExchange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 404C6EBA26565CC8002A6A68 /* JSONExchange.swift */; };
-		404C6EBD26565D10002A6A68 /* ExchangeRequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 404C6EBC26565D10002A6A68 /* ExchangeRequestTests.swift */; };
+		404C6EBD26565D10002A6A68 /* ExchangeServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 404C6EBC26565D10002A6A68 /* ExchangeServiceTests.swift */; };
 		404C6EBF26565E08002A6A68 /* ExchangeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 404C6EBE26565E08002A6A68 /* ExchangeViewController.swift */; };
 		404C6EC126565E11002A6A68 /* TranslateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 404C6EC026565E11002A6A68 /* TranslateViewController.swift */; };
 		404C6EC326565E16002A6A68 /* WeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 404C6EC226565E16002A6A68 /* WeatherViewController.swift */; };
+		406E0741265AC47A00B9EB48 /* Quote.json in Resources */ = {isa = PBXBuildFile; fileRef = 406E0740265AC47A00B9EB48 /* Quote.json */; };
+		406E0743265AC4B500B9EB48 /* FakeExchangeResponseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406E0742265AC4B500B9EB48 /* FakeExchangeResponseData.swift */; };
+		406E0745265AC5DE00B9EB48 /* URLSessionFake.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406E0744265AC5DE00B9EB48 /* URLSessionFake.swift */; };
+		406E0747265B03A700B9EB48 /* Currencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406E0746265B03A700B9EB48 /* Currencies.swift */; };
+		4080B5CB265BB5DA007324C7 /* ExchangeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4080B5CA265BB5DA007324C7 /* ExchangeManager.swift */; };
+		4080B5CD265BC677007324C7 /* ExchangeManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4080B5CC265BC677007324C7 /* ExchangeManagerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
 		404C6E9326565BC3002A6A68 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 404C6E7426565BC2002A6A68 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 404C6E7B26565BC2002A6A68;
-			remoteInfo = "Travel Helper";
-		};
-		404C6E9E26565BC3002A6A68 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 404C6E7426565BC2002A6A68 /* Project object */;
 			proxyType = 1;
@@ -49,16 +47,19 @@
 		404C6E8D26565BC3002A6A68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		404C6E9226565BC3002A6A68 /* Travel HelperTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Travel HelperTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		404C6E9826565BC3002A6A68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		404C6E9D26565BC3002A6A68 /* Travel HelperUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Travel HelperUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		404C6EA126565BC3002A6A68 /* Travel_HelperUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Travel_HelperUITests.swift; sourceTree = "<group>"; };
-		404C6EA326565BC3002A6A68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		404C6EB626565C89002A6A68 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		404C6EB826565CA4002A6A68 /* ExchangeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeRequest.swift; sourceTree = "<group>"; };
+		404C6EB826565CA4002A6A68 /* ExchangeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeService.swift; sourceTree = "<group>"; };
 		404C6EBA26565CC8002A6A68 /* JSONExchange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONExchange.swift; sourceTree = "<group>"; };
-		404C6EBC26565D10002A6A68 /* ExchangeRequestTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeRequestTests.swift; sourceTree = "<group>"; };
+		404C6EBC26565D10002A6A68 /* ExchangeServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeServiceTests.swift; sourceTree = "<group>"; };
 		404C6EBE26565E08002A6A68 /* ExchangeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeViewController.swift; sourceTree = "<group>"; };
 		404C6EC026565E11002A6A68 /* TranslateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateViewController.swift; sourceTree = "<group>"; };
 		404C6EC226565E16002A6A68 /* WeatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewController.swift; sourceTree = "<group>"; };
+		406E0740265AC47A00B9EB48 /* Quote.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Quote.json; sourceTree = "<group>"; };
+		406E0742265AC4B500B9EB48 /* FakeExchangeResponseData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeExchangeResponseData.swift; sourceTree = "<group>"; };
+		406E0744265AC5DE00B9EB48 /* URLSessionFake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionFake.swift; sourceTree = "<group>"; };
+		406E0746265B03A700B9EB48 /* Currencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Currencies.swift; sourceTree = "<group>"; };
+		4080B5CA265BB5DA007324C7 /* ExchangeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeManager.swift; sourceTree = "<group>"; };
+		4080B5CC265BC677007324C7 /* ExchangeManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeManagerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,13 +77,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		404C6E9A26565BC3002A6A68 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -91,7 +85,6 @@
 			children = (
 				404C6E7E26565BC2002A6A68 /* Travel Helper */,
 				404C6E9526565BC3002A6A68 /* Travel HelperTests */,
-				404C6EA026565BC3002A6A68 /* Travel HelperUITests */,
 				404C6E7D26565BC2002A6A68 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -101,7 +94,6 @@
 			children = (
 				404C6E7C26565BC2002A6A68 /* Travel Helper.app */,
 				404C6E9226565BC3002A6A68 /* Travel HelperTests.xctest */,
-				404C6E9D26565BC3002A6A68 /* Travel HelperUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -120,19 +112,14 @@
 		404C6E9526565BC3002A6A68 /* Travel HelperTests */ = {
 			isa = PBXGroup;
 			children = (
-				404C6EBC26565D10002A6A68 /* ExchangeRequestTests.swift */,
+				404C6EBC26565D10002A6A68 /* ExchangeServiceTests.swift */,
+				406E0742265AC4B500B9EB48 /* FakeExchangeResponseData.swift */,
+				406E0744265AC5DE00B9EB48 /* URLSessionFake.swift */,
+				4080B5CC265BC677007324C7 /* ExchangeManagerTests.swift */,
+				406E0740265AC47A00B9EB48 /* Quote.json */,
 				404C6E9826565BC3002A6A68 /* Info.plist */,
 			);
 			path = "Travel HelperTests";
-			sourceTree = "<group>";
-		};
-		404C6EA026565BC3002A6A68 /* Travel HelperUITests */ = {
-			isa = PBXGroup;
-			children = (
-				404C6EA126565BC3002A6A68 /* Travel_HelperUITests.swift */,
-				404C6EA326565BC3002A6A68 /* Info.plist */,
-			);
-			path = "Travel HelperUITests";
 			sourceTree = "<group>";
 		};
 		404C6EAF26565BE5002A6A68 /* Modele */ = {
@@ -179,8 +166,10 @@
 		404C6EB326565C59002A6A68 /* Exchange */ = {
 			isa = PBXGroup;
 			children = (
-				404C6EB826565CA4002A6A68 /* ExchangeRequest.swift */,
+				404C6EB826565CA4002A6A68 /* ExchangeService.swift */,
 				404C6EBA26565CC8002A6A68 /* JSONExchange.swift */,
+				406E0746265B03A700B9EB48 /* Currencies.swift */,
+				4080B5CA265BB5DA007324C7 /* ExchangeManager.swift */,
 			);
 			path = Exchange;
 			sourceTree = "<group>";
@@ -237,24 +226,6 @@
 			productReference = 404C6E9226565BC3002A6A68 /* Travel HelperTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		404C6E9C26565BC3002A6A68 /* Travel HelperUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 404C6EAC26565BC3002A6A68 /* Build configuration list for PBXNativeTarget "Travel HelperUITests" */;
-			buildPhases = (
-				404C6E9926565BC3002A6A68 /* Sources */,
-				404C6E9A26565BC3002A6A68 /* Frameworks */,
-				404C6E9B26565BC3002A6A68 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				404C6E9F26565BC3002A6A68 /* PBXTargetDependency */,
-			);
-			name = "Travel HelperUITests";
-			productName = "Travel HelperUITests";
-			productReference = 404C6E9D26565BC3002A6A68 /* Travel HelperUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -268,10 +239,6 @@
 						CreatedOnToolsVersion = 12.5;
 					};
 					404C6E9126565BC3002A6A68 = {
-						CreatedOnToolsVersion = 12.5;
-						TestTargetID = 404C6E7B26565BC2002A6A68;
-					};
-					404C6E9C26565BC3002A6A68 = {
 						CreatedOnToolsVersion = 12.5;
 						TestTargetID = 404C6E7B26565BC2002A6A68;
 					};
@@ -292,7 +259,6 @@
 			targets = (
 				404C6E7B26565BC2002A6A68 /* Travel Helper */,
 				404C6E9126565BC3002A6A68 /* Travel HelperTests */,
-				404C6E9C26565BC3002A6A68 /* Travel HelperUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -312,13 +278,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		404C6E9B26565BC3002A6A68 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				406E0741265AC47A00B9EB48 /* Quote.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -329,13 +289,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				406E0747265B03A700B9EB48 /* Currencies.swift in Sources */,
 				404C6E8026565BC2002A6A68 /* AppDelegate.swift in Sources */,
 				404C6EBF26565E08002A6A68 /* ExchangeViewController.swift in Sources */,
 				404C6EBB26565CC8002A6A68 /* JSONExchange.swift in Sources */,
 				404C6E8226565BC2002A6A68 /* SceneDelegate.swift in Sources */,
 				404C6EB726565C89002A6A68 /* Constants.swift in Sources */,
 				404C6EC326565E16002A6A68 /* WeatherViewController.swift in Sources */,
-				404C6EB926565CA4002A6A68 /* ExchangeRequest.swift in Sources */,
+				404C6EB926565CA4002A6A68 /* ExchangeService.swift in Sources */,
+				4080B5CB265BB5DA007324C7 /* ExchangeManager.swift in Sources */,
 				404C6EC126565E11002A6A68 /* TranslateViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -344,15 +306,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				404C6EBD26565D10002A6A68 /* ExchangeRequestTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		404C6E9926565BC3002A6A68 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				404C6EA226565BC3002A6A68 /* Travel_HelperUITests.swift in Sources */,
+				4080B5CD265BC677007324C7 /* ExchangeManagerTests.swift in Sources */,
+				406E0743265AC4B500B9EB48 /* FakeExchangeResponseData.swift in Sources */,
+				406E0745265AC5DE00B9EB48 /* URLSessionFake.swift in Sources */,
+				404C6EBD26565D10002A6A68 /* ExchangeServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -363,11 +320,6 @@
 			isa = PBXTargetDependency;
 			target = 404C6E7B26565BC2002A6A68 /* Travel Helper */;
 			targetProxy = 404C6E9326565BC3002A6A68 /* PBXContainerItemProxy */;
-		};
-		404C6E9F26565BC3002A6A68 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 404C6E7B26565BC2002A6A68 /* Travel Helper */;
-			targetProxy = 404C6E9E26565BC3002A6A68 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -587,44 +539,6 @@
 			};
 			name = Release;
 		};
-		404C6EAD26565BC3002A6A68 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = "Travel HelperUITests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.johannpetzold.Travel-HelperUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = "Travel Helper";
-			};
-			name = Debug;
-		};
-		404C6EAE26565BC3002A6A68 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = "Travel HelperUITests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.johannpetzold.Travel-HelperUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = "Travel Helper";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -651,15 +565,6 @@
 			buildConfigurations = (
 				404C6EAA26565BC3002A6A68 /* Debug */,
 				404C6EAB26565BC3002A6A68 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		404C6EAC26565BC3002A6A68 /* Build configuration list for PBXNativeTarget "Travel HelperUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				404C6EAD26565BC3002A6A68 /* Debug */,
-				404C6EAE26565BC3002A6A68 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

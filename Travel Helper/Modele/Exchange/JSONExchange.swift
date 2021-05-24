@@ -12,10 +12,10 @@ struct JSONExchange: Decodable {
     var timestamp: Int
     var base: String
     var date: String
-    var rates: Currencies
+    var rates: JSONCurrencies
 }
 
-struct Currencies: Decodable {
+struct JSONCurrencies: Decodable {
     var USD: Double
     var EUR: Double
     var GBP: Double

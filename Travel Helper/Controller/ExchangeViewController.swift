@@ -116,7 +116,7 @@ extension ExchangeViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     }
 }
 
-// MARK: - Keyboard
+// MARK: - Keyboard & TextField
 extension ExchangeViewController: UITextFieldDelegate {
     @IBAction func dismissKeyboard(_ sender: UITapGestureRecognizer) {
         amountTextField.resignFirstResponder()

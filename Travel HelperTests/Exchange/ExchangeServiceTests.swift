@@ -10,8 +10,10 @@ import XCTest
 
 class ExchangeServiceTests: XCTestCase {
 
+    let filename = "Exchange"
+    
     func testGetExchangeShouldGetErrorCallBackIfError() {
-        let exchangeService = ExchangeService(session: URLSessionFake(data: nil, response: nil, error: FakeExchangeResponseData.error))
+        let exchangeService = ExchangeService(session: URLSessionFake(data: nil, response: nil, error: FakeResponseData.error))
         
         let expectation = XCTestExpectation(description: "Wait for queue change")
         exchangeService.getExchange { exchange, error in
@@ -37,7 +39,7 @@ class ExchangeServiceTests: XCTestCase {
     }
     
     func testGetExchangeShouldGetErrorCallBackIfIncorrectResponse() {
-        let exchangeService = ExchangeService(session: URLSessionFake(data: FakeExchangeResponseData.exchangeCorrectData, response: FakeExchangeResponseData.responseKO, error: nil))
+        let exchangeService = ExchangeService(session: URLSessionFake(data: FakeResponseData.correctData(filename: filename), response: FakeResponseData.responseKO, error: nil))
         
         let expectation = XCTestExpectation(description: "Wait for queue change")
         exchangeService.getExchange { exchange, error in
@@ -50,7 +52,7 @@ class ExchangeServiceTests: XCTestCase {
     }
     
     func testGetExchangeShouldGetErrorCallBackIfIncorrectData() {
-        let exchangeService = ExchangeService(session: URLSessionFake(data: FakeExchangeResponseData.exchangeIncorrectData, response: FakeExchangeResponseData.responseOK, error: nil))
+        let exchangeService = ExchangeService(session: URLSessionFake(data: FakeResponseData.incorrectData, response: FakeResponseData.responseOK, error: nil))
         
         let expectation = XCTestExpectation(description: "Wait for queue change")
         exchangeService.getExchange { exchange, error in
@@ -63,7 +65,7 @@ class ExchangeServiceTests: XCTestCase {
     }
     
     func testGetExchangeShouldGetExchangeCallBackIfCorrectData() {
-        let exchangeService = ExchangeService(session: URLSessionFake(data: FakeExchangeResponseData.exchangeCorrectData, response: FakeExchangeResponseData.responseOK, error: nil))
+        let exchangeService = ExchangeService(session: URLSessionFake(data: FakeResponseData.correctData(filename: filename), response: FakeResponseData.responseOK, error: nil))
         
         let expectation = XCTestExpectation(description: "Wait for queue change")
         exchangeService.getExchange { exchange, error in

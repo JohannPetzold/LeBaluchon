@@ -10,8 +10,10 @@ import XCTest
 
 class ExchangeManagerTests: XCTestCase {
 
+    let filename = "Exchange"
+    
     func testUpdateExchangeShouldUpdatePropertiesWithCorrectData() {
-        let exchangeService = ExchangeService(session: URLSessionFake(data: FakeExchangeResponseData.exchangeCorrectData, response: FakeExchangeResponseData.responseOK, error: nil))
+        let exchangeService = ExchangeService(session: URLSessionFake(data: FakeResponseData.correctData(filename: filename), response: FakeResponseData.responseOK, error: nil))
         let manager = ExchangeManager()
         
         let expectation = XCTestExpectation(description: "Wait for queue change")
@@ -28,7 +30,7 @@ class ExchangeManagerTests: XCTestCase {
     }
     
     func testUpdateExchangeShouldFailWithIncorrectData() {
-        let exchangeService = ExchangeService(session: URLSessionFake(data: FakeExchangeResponseData.exchangeIncorrectData, response: FakeExchangeResponseData.responseOK, error: nil))
+        let exchangeService = ExchangeService(session: URLSessionFake(data: FakeResponseData.incorrectData, response: FakeResponseData.responseOK, error: nil))
         let manager = ExchangeManager()
         
         let expectation = XCTestExpectation(description: "Wait for queue change")
@@ -51,7 +53,7 @@ class ExchangeManagerTests: XCTestCase {
     }
     
     func testSwapCurrenciesShouldReturnResultWithCorrectData() {
-        let exchangeService = ExchangeService(session: URLSessionFake(data: FakeExchangeResponseData.exchangeCorrectData, response: FakeExchangeResponseData.responseOK, error: nil))
+        let exchangeService = ExchangeService(session: URLSessionFake(data: FakeResponseData.correctData(filename: filename), response: FakeResponseData.responseOK, error: nil))
         let manager = ExchangeManager()
         
         let expectation = XCTestExpectation(description: "Wait for queue change")

@@ -18,26 +18,32 @@ class ExchangeService {
     
     private var fixerSession = URLSession(configuration: .default)
     
+    enum exchangeError: Error {
+        case errorOccured
+        case noData
+        case badResponse
+    }
+    
     init(session: URLSession) {
         self.fixerSession = session
     }
     
-    func getExchange(completion: @escaping (_ result: JSONExchange?, _ error: String?) -> Void) {
+    func getExchange(completion: @escaping (_ result: JSONExchange?, _ error: Error?) -> Void) {
         let request = createExchangeRequest()
         
         task?.cancel()
         task = fixerSession.dataTask(with: request, completionHandler: { data, response, error in
             DispatchQueue.main.async {
                 guard let data = data, error == nil else {
-                    completion(nil, "")
+                    completion(nil, exchangeError.errorOccured)
                     return
                 }
                 guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
-                    completion(nil, "")
+                    completion(nil, exchangeError.badResponse)
                     return
                 }
                 guard let responseJSON = try? JSONDecoder().decode(JSONExchange.self, from: data) else {
-                    completion(nil, "")
+                    completion(nil, exchangeError.noData)
                     return
                 }
                 completion(responseJSON, nil)

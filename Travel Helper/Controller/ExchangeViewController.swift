@@ -22,13 +22,10 @@ class ExchangeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        ExchangeService.shared.getExchange { jsonExchange, error in
-            if jsonExchange != nil, error == nil {
-                self.exchange.updateExchange(exchangeData: jsonExchange!)
-            }
+        exchange.getExchange { [weak self] success, error in
             if error != nil {
-                self.errorService = true
-                self.showErrorService()
+                self?.errorService = true
+                self?.showErrorService()
             }
         }
         updateResultData()
@@ -156,11 +153,11 @@ extension ExchangeViewController: UITextFieldDelegate {
 // MARK: - Error
 extension ExchangeViewController {
     @IBAction func tappedRetryService(_ sender: UIButton) {
-        ExchangeService.shared.getExchange { jsonExchange, error in
-            if jsonExchange != nil, error == nil {
-                self.exchange.updateExchange(exchangeData: jsonExchange!)
-                self.errorService = false
-                self.showErrorService()
+        
+        exchange.getExchange { [weak self] success, error in
+            if success, error == nil {
+                self?.errorService = false
+                self?.showErrorService()
             }
         }
     }

@@ -10,11 +10,33 @@ import Foundation
 class ExchangeManager {
     
     var exchangeJson: JSONExchange?
-    private var rates: [Currencies: Double] = [:]
     
-    func updateExchange(exchangeData: JSONExchange) {
-        self.exchangeJson = exchangeData
-        self.getRates()
+    private var rates: [Currencies: Double] = [:]
+    private let fixerKeyParameter = "access_key"
+    private let fixerKey = "83516c3e3ae1a0cf6946383432825865"
+    
+    private var service = APIService(session: URLSession(configuration: .default))
+    
+    init(session: URLSession? = nil) {
+        if session != nil {
+            service = APIService(session: session!)
+        }
+    }
+    
+    func getExchange(completion: @escaping (_ success: Bool, _ error: Error?) -> Void) {
+        let requestData = getRequest()
+        service.makeRequest(requestData: requestData) { data, error in
+            guard let data = data, error == nil else {
+                completion(false, error)
+                return
+            }
+            guard let responseJSON = try? JSONDecoder().decode(JSONExchange.self, from: data) else {
+                completion(false, APIService.ServiceError.decodeFail)
+                return
+            }
+            self.updateExchange(exchangeData: responseJSON)
+            completion(true, nil)
+        }
     }
     
     func swapCurrencies(amount: Double, currency: Currencies, target: Currencies, completion: (Double) -> Void) {
@@ -23,6 +45,15 @@ class ExchangeManager {
         
         let result = amount * (1 / rates[currency]!) * rates[target]!
         completion(result)
+    }
+    
+    private func updateExchange(exchangeData: JSONExchange) {
+        self.exchangeJson = exchangeData
+        self.getRates()
+    }
+    
+    private func getRequest() -> RequestData {
+        return RequestData(urlString: .exchange, http: .get, body: [fixerKeyParameter: fixerKey])
     }
     
     private func getRates() {

@@ -14,8 +14,8 @@ class TranslateViewController: UIViewController {
     @IBOutlet weak var sourceTextField: UITextField!
     @IBOutlet weak var targetLabel: UILabel!
     @IBOutlet weak var errorServiceView: UIView!
-        
-    private var data = TranslateData()
+    
+    private var manager = TranslateManager()
     private var errorService: Bool = false
     
     override func viewDidLoad() {
@@ -27,17 +27,17 @@ class TranslateViewController: UIViewController {
 extension TranslateViewController {
     @IBAction func tappedTranslateButton(_ sender: UIButton) {
         guard let text = sourceTextField.text else { return }
-        data.text = text
+        manager.translateData.text = text
         getTranslation()
     }
     
     private func getTranslation() {
-        TranslateService.shared.translate(data: data) { translation, error in
+        manager.getTranslation { [weak self] translation, error in
             if translation != nil && error == nil {
-                self.targetLabel.text = translation!
+                self?.targetLabel.text = translation!
             }
             if error != nil {
-                self.showErrorService()
+                self?.showErrorService()
             }
         }
     }
@@ -60,10 +60,10 @@ extension TranslateViewController {
     
     private func modifyTranslateData(flags: [UIButton], choice: String) {
         if flags == sourceFlags {
-            data.source = choice
+            manager.translateData.source = choice
         }
         if flags == targetFlags {
-            data.target = choice
+            manager.translateData.target = choice
         }
     }
     
@@ -84,7 +84,7 @@ extension TranslateViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField.text != nil && textField.text != "" {
-            data.text = textField.text
+            manager.translateData.text = textField.text
             getTranslation()
         }
         return textField.resignFirstResponder()

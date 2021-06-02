@@ -2,7 +2,7 @@
 //  ExchangeManagerTests.swift
 //  Travel HelperTests
 //
-//  Created by Johann Petzold on 24/05/2021.
+//  Created by Johann Petzold on 02/06/2021.
 //
 
 import XCTest
@@ -12,31 +12,52 @@ class ExchangeManagerTests: XCTestCase {
 
     let filename = "Exchange"
     
-    func testUpdateExchangeShouldUpdatePropertiesWithCorrectData() {
-        let exchangeService = ExchangeService(session: URLSessionFake(data: FakeResponseData.correctData(filename: filename), response: FakeResponseData.responseOK, error: nil))
-        let manager = ExchangeManager()
+    func testGetExchangeShouldGetErrorWhenUsingError() {
+        let session = ExchangeManager(session: URLSessionFake(data: nil, response: nil, error: FakeResponseData.error))
         
         let expectation = XCTestExpectation(description: "Wait for queue change")
-        exchangeService.getExchange { exchange, error in
-            if exchange != nil {
-                manager.updateExchange(exchangeData: exchange!)
-            }
-            XCTAssertNotNil(manager.exchangeJson)
-            
-            expectation.fulfill()
-        }
-        
-        wait(for: [expectation], timeout: 0.01)
-    }
-    
-    func testUpdateExchangeShouldFailWithIncorrectData() {
-        let exchangeService = ExchangeService(session: URLSessionFake(data: FakeResponseData.incorrectData, response: FakeResponseData.responseOK, error: nil))
-        let manager = ExchangeManager()
-        
-        let expectation = XCTestExpectation(description: "Wait for queue change")
-        exchangeService.getExchange { exchange, error in
-            XCTAssertNil(manager.exchangeJson)
+        session.getExchange { success, error in
+            XCTAssertFalse(success)
             XCTAssertNotNil(error)
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 0.01)
+    }
+    
+    func testGetExchangeShouldGetErrorWhenUsingBadData() {
+        let session = ExchangeManager(session: URLSessionFake(data: FakeResponseData.incorrectData, response: FakeResponseData.responseOK, error: nil))
+        
+        let expectation = XCTestExpectation(description: "Wait for queue change")
+        session.getExchange { success, error in
+            XCTAssertFalse(success)
+            XCTAssertNotNil(error)
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 0.01)
+    }
+    
+    func testGetExchangeShouldGetErrorWhenUsingBadResponse() {
+        let session = ExchangeManager(session: URLSessionFake(data: FakeResponseData.incorrectData, response: FakeResponseData.responseKO, error: nil))
+        
+        let expectation = XCTestExpectation(description: "Wait for queue change")
+        session.getExchange { success, error in
+            XCTAssertFalse(success)
+            XCTAssertNotNil(error)
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 0.01)
+    }
+    
+    func testGetExchangeShouldGetSuccessWhenUsingGoodData() {
+        let session = ExchangeManager(session: URLSessionFake(data: FakeResponseData.correctData(filename: filename), response: FakeResponseData.responseOK, error: nil))
+        
+        let expectation = XCTestExpectation(description: "Wait for queue change")
+        session.getExchange { success, error in
+            XCTAssertTrue(success)
+            XCTAssertNil(error)
             
             expectation.fulfill()
         }
@@ -44,30 +65,27 @@ class ExchangeManagerTests: XCTestCase {
         wait(for: [expectation], timeout: 0.01)
     }
     
-    func testSwapCurrenciesShouldFailWithIncorrectData() {
-        var testResult: Double = 0
+    func testSwapCurrenciesShouldReturnIfNoExchangeJson() {
         ExchangeManager().swapCurrencies(amount: 10, currency: .aud, target: .eur) { result in
-            testResult = result
-            XCTAssertEqual(testResult, 0)
+            XCTAssertNil(result)
         }
     }
     
-    func testSwapCurrenciesShouldReturnResultWithCorrectData() {
-        let exchangeService = ExchangeService(session: URLSessionFake(data: FakeResponseData.correctData(filename: filename), response: FakeResponseData.responseOK, error: nil))
-        let manager = ExchangeManager()
+    func testSwapCurrenciesShouldReturnResultIfGoodData() {
+        let session = ExchangeManager(session: URLSessionFake(data: FakeResponseData.correctData(filename: filename), response: FakeResponseData.responseOK, error: nil))
         
         let expectation = XCTestExpectation(description: "Wait for queue change")
-        exchangeService.getExchange { exchange, error in
-            if exchange != nil {
-                manager.updateExchange(exchangeData: exchange!)
-                manager.swapCurrencies(amount: 1, currency: .eur, target: .usd) { result in
-                    XCTAssertEqual(result, 1.218125)
+        session.getExchange { success, error in
+            XCTAssertTrue(success)
+            XCTAssertNil(error)
+            
+            if success {
+                session.swapCurrencies(amount: 1, currency: .eur, target: .aud) { result in
+                    XCTAssertEqual(result, 1.575433)
+                    expectation.fulfill()
                 }
             }
-            
-            expectation.fulfill()
         }
-        
         wait(for: [expectation], timeout: 0.01)
     }
 }

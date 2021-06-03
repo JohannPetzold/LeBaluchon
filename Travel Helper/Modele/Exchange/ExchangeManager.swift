@@ -13,13 +13,12 @@ class ExchangeManager {
     
     private var rates: [Currencies: Double] = [:]
     private let fixerKeyParameter = "access_key"
-    private let fixerKey = "83516c3e3ae1a0cf6946383432825865"
     
     private var service = APIService(session: URLSession(configuration: .default))
     
     init(session: URLSession? = nil) {
-        if session != nil {
-            service = APIService(session: session!)
+        if let session = session {
+            service = APIService(session: session)
         }
     }
     
@@ -53,7 +52,7 @@ class ExchangeManager {
     }
     
     private func getRequest() -> RequestData {
-        return RequestData(urlString: .exchange, http: .get, body: [fixerKeyParameter: fixerKey])
+        return RequestData(urlString: .exchange, http: .get, body: [fixerKeyParameter: EXCHANGE_KEY])
     }
     
     private func getRates() {

@@ -20,7 +20,7 @@ struct RequestData {
     enum apiUrl: String {
         case exchange = "http://data.fixer.io/api/latest"
         case translate = "https://translation.googleapis.com/language/translate/v2"
-        case weather
+        case weather = "https://api.openweathermap.org/data/2.5/weather"
         case test = "https://openclassrooms.com"
     }
     

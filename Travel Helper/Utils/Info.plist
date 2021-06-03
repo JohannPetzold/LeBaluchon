@@ -67,5 +67,11 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>La localisation permet de récupérer les informations météo de votre emplacement</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>La localisation permet de récupérer les informations météo de votre emplacement</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>La localisation permet de récupérer les informations météo de votre emplacement</string>
 </dict>
 </plist>

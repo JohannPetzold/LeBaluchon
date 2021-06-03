@@ -13,7 +13,7 @@ class TranslateManagerTests: XCTestCase {
     let filename = "Translate"
     let translateData = TranslateData(text: "Bonjour", source: "fr", target: "en")
     
-    func testGetTranslateShouldReturnWhenNoTranslateData() {
+    func testGetTranslateShouldGetErrorWhenNoTranslateData() {
         let session = TranslateManager(session: URLSessionFake(data: nil, response: nil, error: FakeResponseData.error))
         
         session.getTranslation { translation, error in
@@ -37,7 +37,7 @@ class TranslateManagerTests: XCTestCase {
     }
     
     func testGetTranslationShouldGetErrorWhenUsingBadResponse() {
-        let session = TranslateManager(session: URLSessionFake(data: FakeResponseData.correctData(filename: filename), response: FakeResponseData.responseKO, error: nil))
+        let session = TranslateManager(session: URLSessionFake(data: nil, response: FakeResponseData.responseKO, error: nil))
         session.translateData = translateData
         
         let expectation = XCTestExpectation(description: "Wait for queue change")

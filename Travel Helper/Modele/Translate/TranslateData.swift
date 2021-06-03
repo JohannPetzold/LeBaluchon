@@ -17,6 +17,7 @@ class TranslateData {
         self.source = source
         self.target = target
     }
+    
     enum DataStatus {
         case valid
         case invalid

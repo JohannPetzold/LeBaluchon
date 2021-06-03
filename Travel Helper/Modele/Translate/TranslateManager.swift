@@ -21,7 +21,7 @@ class TranslateManager {
     
     func getTranslation(completion: @escaping (_ translation: String?, _ error: Error?) -> Void) {
         guard let requestData = getRequest() else {
-            completion(nil, APIService.ServiceError.noData)
+            completion(nil, APIService.ServiceError.noRequest)
             return
         }
         service.makeRequest(requestData: requestData) { data, error in

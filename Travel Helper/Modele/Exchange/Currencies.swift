@@ -8,8 +8,8 @@
 import Foundation
 
 enum Currencies: String, CaseIterable {
-    case usd = "$"
     case eur = "€"
+    case usd = "$"
     case gbp = "£"
     case jpy = "¥"
     case aud = "$AU"

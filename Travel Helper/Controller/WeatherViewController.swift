@@ -14,10 +14,12 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var cityNameLabel1: UILabel!
     @IBOutlet weak var tempLabel1: UILabel!
     @IBOutlet weak var descriptionLabel1: UILabel!
+    @IBOutlet weak var iconDescription1: UIImageView!
     @IBOutlet weak var minMaxLabel1: UILabel!
     @IBOutlet weak var cityNameLabel2: UILabel!
     @IBOutlet weak var tempLabel2: UILabel!
     @IBOutlet weak var descriptionLabel2: UILabel!
+    @IBOutlet weak var iconDescription2: UIImageView!
     @IBOutlet weak var minMaxLabel2: UILabel!
     @IBOutlet weak var locateButton: UIButton!
     @IBOutlet weak var errorView: UIView!
@@ -25,7 +27,6 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var reloadButton: UIButton!
     
     private var locManager = CLLocationManager()
-    private var location = CLLocationCoordinate2D()
     private var myLocationCity = ""
     private var locEnable: Bool = false
     private var errorService: Bool = false
@@ -33,28 +34,18 @@ class WeatherViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        locManager.requestWhenInUseAuthorization()
-        if !(CLLocationManager.authorizationStatus() == .denied) {
-            locEnable = true
-            location = locManager.location!.coordinate
-            getCurrentCityWeather(weatherData: WeatherData(lon: location.longitude, lat: location.latitude))
-        } else {
-            locEnable = false
-        }
+        locManager.delegate = self
         
         getActualDate()
         getFirstCityWeather()
-        changeStateReloadButton()
+        getCurrentCityAtStart()
+        //changeStateReloadButton()
         changeStateLocateButton()
     }
 }
 
-// MARK: - Labels
+// MARK: - Service
 extension WeatherViewController {
-    
-    private func getActualDate() {
-        dateLabel.text = Date().dateString()
-    }
     
     private func getFirstCityWeather() {
         let nyData = WeatherData(name: "New York")
@@ -62,8 +53,13 @@ extension WeatherViewController {
             if data != nil && error == nil {
                 self?.changeFirstCityLabels(data: data!)
                 self?.changeStateReloadButton()
-            } else {
-                self?.showErrorService()
+            } else if let error = error as? APIService.ServiceError {
+                if let alertVC = self?.makeAlertVC(message: error.rawValue) {
+                    self?.present(alertVC, animated: true, completion: {
+                        self?.changeStateReloadButton()
+                    })
+                }
+                //self?.showErrorService()
             }
         }
     }
@@ -77,10 +73,27 @@ extension WeatherViewController {
                 }
                 self?.changeStateLocateButton()
                 self?.cityTextField.text = ""
-            } else {
-                self?.showErrorService()
+            } else if let error = error as? APIService.ServiceError {
+                if let alertVC = self?.makeAlertVC(message: error.rawValue) {
+                    self?.present(alertVC, animated: true, completion: nil)
+                }
+                //self?.showErrorService()
             }
         }
+    }
+    
+    private func getCurrentCityAtStart() {
+        guard let location = locManager.location?.coordinate else { return }
+        let data = WeatherData(lon: location.longitude, lat: location.latitude)
+        getCurrentCityWeather(weatherData: data)
+    }
+}
+
+// MARK: - Labels
+extension WeatherViewController {
+    
+    private func getActualDate() {
+        dateLabel.text = Date().dateString()
     }
     
     private func changeFirstCityLabels(data: JSONWeather) {
@@ -90,6 +103,8 @@ extension WeatherViewController {
         let min = Int(data.main.temp_min)
         let max = Int(data.main.temp_max)
         minMaxLabel1.text = "\(min)°c / \(max)°c"
+        iconDescription1.image = UIImage(named: data.weather.first?.icon ?? "")
+        iconDescription1.isHidden = false
     }
     
     private func changeSecondCityLabels(data: JSONWeather) {
@@ -99,11 +114,14 @@ extension WeatherViewController {
         let min = Int(data.main.temp_min)
         let max = Int(data.main.temp_max)
         minMaxLabel2.text = "\(min)°c / \(max)°c"
+        iconDescription2.image = UIImage(named: data.weather.first?.icon ?? "")
+        iconDescription2.isHidden = false
     }
 }
 
 // MARK: - Reload Button
 extension WeatherViewController {
+    
     @IBAction func tappedReloadButton(_ sender: UIButton) {
         getFirstCityWeather()
     }
@@ -123,23 +141,26 @@ extension WeatherViewController {
 extension WeatherViewController {
     
     @IBAction func tappedLocate(_ sender: UIButton) {
-        location = locManager.location!.coordinate
-        getCurrentCityWeather(weatherData: WeatherData(lon: location.longitude, lat: location.latitude))
+        if CLLocationManager.authorizationStatus() == .notDetermined {
+            locManager.requestWhenInUseAuthorization()
+        } else {
+            guard let location = locManager.location?.coordinate else { return }
+            getCurrentCityWeather(weatherData: WeatherData(lon: location.longitude, lat: location.latitude))
+        }
     }
     
     private func changeStateLocateButton() {
-        if !locEnable {
+        if CLLocationManager.authorizationStatus() == .denied {
             locateButton.isEnabled = false
-            locateButton.alpha = 0.3
-            locateButton.tintColor = .gray
+            locateButton.alpha = 0.4
+            locateButton.setImage(UIImage(systemName: "location.slash"), for: .disabled)
         } else if cityNameLabel2.text != "-" && cityNameLabel2.text == myLocationCity {
             locateButton.isEnabled = false
-            locateButton.alpha = 0.3
-            locateButton.tintColor = .blue
+            locateButton.alpha = 0.4
+            locateButton.setImage(UIImage(systemName: "location.fill"), for: .disabled)
         } else {
             locateButton.isEnabled = true
             locateButton.alpha = 1
-            locateButton.tintColor = .blue
         }
     }
 }
@@ -164,6 +185,7 @@ extension WeatherViewController: UITextFieldDelegate {
 
 // MARK: - Error
 extension WeatherViewController {
+    
     private func showErrorService() {
         errorService = true
         errorView.isHidden = !errorService
@@ -171,5 +193,29 @@ extension WeatherViewController {
             self.errorService = false
             self.errorView.isHidden = !self.errorService
         }
+    }
+    
+    private func makeAlertVC(message: String) -> UIAlertController {
+        let alertVC = UIAlertController(title: "Une erreur est survenue", message: message, preferredStyle: .alert)
+        alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { alert in
+            self.cityTextField.text = ""
+        }))
+        return alertVC
+    }
+}
+
+// MARK: - LocationManagerDelegate
+extension WeatherViewController: CLLocationManagerDelegate {
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        if locManager.location != nil {
+            let location = locManager.location!.coordinate
+            getCurrentCityWeather(weatherData: WeatherData(lon: location.longitude, lat: location.latitude))
+        }
+        changeStateLocateButton()
     }
 }

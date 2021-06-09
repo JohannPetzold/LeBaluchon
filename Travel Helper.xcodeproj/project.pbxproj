@@ -141,11 +141,11 @@
 				406E0744265AC5DE00B9EB48 /* URLSessionFake.swift */,
 				406E0742265AC4B500B9EB48 /* FakeResponseData.swift */,
 				40D4788B2667BDE2006CFB07 /* APIServiceTests.swift */,
+				407B98FF2669217C00A18CD4 /* DateExtensionTests.swift */,
 				40CC2208265C1A4900AC3505 /* Exchange */,
 				404FF19E265FD83000D0B713 /* Translate */,
 				407E4BB82667DA11009956C8 /* Weather */,
 				404C6E9826565BC3002A6A68 /* Info.plist */,
-				407B98FF2669217C00A18CD4 /* DateExtensionTests.swift */,
 			);
 			path = "Travel HelperTests";
 			sourceTree = "<group>";

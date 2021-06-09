@@ -20,6 +20,7 @@ struct JSONWeather: Decodable {
 struct Weather: Decodable {
     var main: String
     var description: String
+    var icon: String
 }
 
 struct Temperature: Decodable {

@@ -16,12 +16,12 @@ class APIService {
     
     private var session = URLSession(configuration: .default)
     
-    enum ServiceError: Error {
-        case noRequest
-        case errorOccured
-        case noData
-        case badResponse
-        case decodeFail
+    enum ServiceError: String, Error {
+        case noRequest = "Requête non valide"
+        case errorOccured = "Une erreur est survenue"
+        case noData = "Aucune donnée récupérée"
+        case badResponse = "Un problème est survenu lors de la récupération des données"
+        case decodeFail = "Données récupérées non valides"
     }
     
     init(session: URLSession) {

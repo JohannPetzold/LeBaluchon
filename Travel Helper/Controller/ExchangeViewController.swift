@@ -22,13 +22,25 @@ class ExchangeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        addButtonToKeyboard(title: "Fermer")
+        addKeyboardObservers()
+        getService()
+        updateResultData()
+    }
+}
+
+// MARK: - Service
+extension ExchangeViewController {
+    private func getService() {
         exchange.getExchange { [weak self] success, error in
-            if error != nil {
+            if let error = error as? APIService.ServiceError {
                 self?.errorService = true
+                if let alertVC = self?.makeAlertVC(message: error.rawValue) {
+                    self?.present(alertVC, animated: true, completion: nil)
+                }
                 self?.showErrorService()
             }
         }
-        updateResultData()
     }
 }
 
@@ -113,12 +125,9 @@ extension ExchangeViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     }
 }
 
-// MARK: - Keyboard & TextField
+// MARK: - TextField & Keyboard
 extension ExchangeViewController: UITextFieldDelegate {
-    @IBAction func dismissKeyboard(_ sender: UITapGestureRecognizer) {
-        amountTextField.resignFirstResponder()
-    }
-    
+
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         return amountTextField.resignFirstResponder()
     }
@@ -131,11 +140,9 @@ extension ExchangeViewController: UITextFieldDelegate {
         if string == "" {
             return true
         }
-        
         if (textField.text?.contains("."))! && string == "." {
             return false
         }
-        
         if (textField.text?.contains("."))! {
             let limitDecimalPlace = 2
             let decimalPlace = textField.text?.components(separatedBy: ".").last
@@ -148,21 +155,57 @@ extension ExchangeViewController: UITextFieldDelegate {
         }
         return true
     }
+    
+    @IBAction func dismissKeyboard(_ sender: UITapGestureRecognizer) {
+        amountTextField.resignFirstResponder()
+    }
+    
+    private func addButtonToKeyboard(title: String) {
+        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 35))
+        
+        toolbar.items = [
+            UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: self, action: nil),
+            UIBarButtonItem(title: title, style: UIBarButtonItem.Style.done, target: textField, action: #selector(hideKeyboard))
+        ]
+        toolbar.sizeToFit()
+        amountTextField.inputAccessoryView = toolbar
+    }
+    
+    @objc func hideKeyboard() {
+        amountTextField.resignFirstResponder()
+    }
+    
+    private func addKeyboardObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc func keyboardWillShow(_ notification:Notification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue, view.frame.origin.y == 0 {
+            self.view.frame.origin.y -= keyboardSize.height / 2
+        }
+    }
+
+    @objc func keyboardWillHide(_ notification:Notification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue, view.frame.origin.y != 0 {
+            self.view.frame.origin.y += keyboardSize.height / 2
+        }
+    }
 }
 
 // MARK: - Error
 extension ExchangeViewController {
     @IBAction func tappedRetryService(_ sender: UIButton) {
-        
-        exchange.getExchange { [weak self] success, error in
-            if success, error == nil {
-                self?.errorService = false
-                self?.showErrorService()
-            }
-        }
+        getService()
     }
     
     private func showErrorService() {
         errorServiceView.isHidden = !errorService
+    }
+    
+    private func makeAlertVC(message: String) -> UIAlertController {
+        let alertVC = UIAlertController(title: "Une erreur est survenue", message: message, preferredStyle: .alert)
+        alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+        return alertVC
     }
 }

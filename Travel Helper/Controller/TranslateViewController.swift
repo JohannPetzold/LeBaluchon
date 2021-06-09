@@ -9,17 +9,22 @@ import UIKit
 
 class TranslateViewController: UIViewController {
 
-    @IBOutlet var sourceFlags: [UIButton]!
-    @IBOutlet var targetFlags: [UIButton]!
+    @IBOutlet weak var sourceFlag: UIImageView!
+    @IBOutlet weak var targetFlag: UIImageView!
     @IBOutlet weak var sourceTextField: UITextField!
     @IBOutlet weak var targetLabel: UILabel!
     @IBOutlet weak var errorServiceView: UIView!
+    @IBOutlet weak var translateButton: UIButton!
+    @IBOutlet weak var serviceActivityIndicator: UIActivityIndicatorView!
     
     private var manager = TranslateManager()
     private var errorService: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        initTranslateData()
+        serviceActivityIndicator.stopAnimating()
     }
 }
 
@@ -32,12 +37,19 @@ extension TranslateViewController {
     }
     
     private func getTranslation() {
+        showActivityIndicator()
         manager.getTranslation { [weak self] translation, error in
             if translation != nil && error == nil {
                 self?.targetLabel.text = translation!
+                self?.hideActivityIndicator()
             }
-            if error != nil {
-                self?.showErrorService()
+            if let error = error as? APIService.ServiceError {
+                if let alertVC = self?.makeAlertVC(message: error.rawValue) {
+                    self?.present(alertVC, animated: true, completion: {
+                        self?.hideActivityIndicator()
+                    })
+                }
+                //self?.showErrorService()
             }
         }
     }
@@ -45,34 +57,28 @@ extension TranslateViewController {
 
 // MARK: - Flags Data & Action
 extension TranslateViewController {
-    private func modifyFlagsState(flags: [UIButton], choice: String) {
-        for flag in flags {
-            if flag.currentTitle == choice && !flag.isSelected {
-                flag.isSelected = true
-                flag.alpha = 1
-                modifyTranslateData(flags: flags, choice: choice)
-            } else {
-                flag.isSelected = false
-                flag.alpha = 0.5
-            }
-        }
+    private func initTranslateData() {
+        manager.translateData.source = "fr"
+        manager.translateData.target = "en"
     }
     
-    private func modifyTranslateData(flags: [UIButton], choice: String) {
-        if flags == sourceFlags {
-            manager.translateData.source = choice
+    @IBAction func tappedSwapButton(_ sender: UIButton) {
+        if manager.translateData.source == "fr" {
+            sourceFlag.image = UIImage(named: "en")
+            targetFlag.image = UIImage(named: "fr")
+            manager.translateData.source = "en"
+            manager.translateData.target = "fr"
+        } else if manager.translateData.source == "en" {
+            sourceFlag.image = UIImage(named: "fr")
+            targetFlag.image = UIImage(named: "en")
+            manager.translateData.source = "fr"
+            manager.translateData.target = "en"
         }
-        if flags == targetFlags {
-            manager.translateData.target = choice
+        if sourceTextField.text != nil && sourceTextField.text != "" && targetLabel.text != "" {
+            let tempText = sourceTextField.text!
+            sourceTextField.text = targetLabel.text
+            targetLabel.text = tempText
         }
-    }
-    
-    @IBAction func tappedSourceFlagButton(_ sender: UIButton) {
-        modifyFlagsState(flags: sourceFlags, choice: sender.currentTitle!)
-    }
-    
-    @IBAction func tappedTargetFlagButton(_ sender: UIButton) {
-        modifyFlagsState(flags: targetFlags, choice: sender.currentTitle!)
     }
 }
 
@@ -89,6 +95,23 @@ extension TranslateViewController: UITextFieldDelegate {
         }
         return textField.resignFirstResponder()
     }
+    
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        targetLabel.text = ""
+    }
+}
+
+// MARK: - ActivityIndicator
+extension TranslateViewController {
+    private func showActivityIndicator() {
+        serviceActivityIndicator.startAnimating()
+        translateButton.isHidden = true
+    }
+    
+    private func hideActivityIndicator() {
+        serviceActivityIndicator.stopAnimating()
+        translateButton.isHidden = false
+    }
 }
 
 // MARK: - Error
@@ -101,4 +124,18 @@ extension TranslateViewController {
             self.errorServiceView.isHidden = !self.errorService
         }
     }
+    
+    private func makeAlertVC(message: String) -> UIAlertController {
+        let alertVC = UIAlertController(title: "Une erreur est survenue", message: message, preferredStyle: .alert)
+        alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+        return alertVC
+    }
 }
+
+//func getFlag() -> String {
+//        let base: UInt32 = UnicodeScalar("🇦").value - UnicodeScalar("A").value
+//
+//        return String(String.UnicodeScalarView(
+//            countryCode.unicodeScalars.compactMap({ UnicodeScalar(base + $0.value) })
+//        ))
+//    }

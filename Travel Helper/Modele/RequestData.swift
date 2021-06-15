@@ -8,6 +8,7 @@
 import Foundation
 
 struct RequestData {
+    
     var urlString: apiUrl?
     var http: httpMethod?
     var body: [String: String]?
@@ -20,6 +21,7 @@ struct RequestData {
     enum apiUrl: String {
         case exchange = "http://data.fixer.io/api/latest"
         case translate = "https://translation.googleapis.com/language/translate/v2"
+        case detect = "https://translation.googleapis.com/language/translate/v2/detect"
         case weather = "https://api.openweathermap.org/data/2.5/weather"
         case test = "https://openclassrooms.com"
     }

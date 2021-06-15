@@ -1,0 +1,22 @@
+/* 
+  Localizable.strings
+  Travel Helper
+
+  Created by Johann Petzold on 11/06/2021.
+  
+*/
+
+/* Exchange */
+"exchange_bar_item" = "Devises";
+
+/* Translate */
+"translate_bar_item" = "Traducteur";
+"translate_button" = "Traduire";
+"source_placeholder" = "Entrer un texte à traduire";
+"detect_label" = "Auto détection";
+
+/* Weather */
+"weather_bar_item" = "Météo";
+"city_textfield_placeholder" = "Entrer le nom d'une ville";
+
+/* Error */

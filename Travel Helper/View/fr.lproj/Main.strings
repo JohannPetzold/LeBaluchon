@@ -1,0 +1,51 @@
+
+/* Class = "UITabBarItem"; title = "exchange_bar_item"; ObjectID = "3v6-Bd-Z0r"; */
+"3v6-Bd-Z0r.title" = "Devises";
+
+/* Class = "UILabel"; text = "-"; ObjectID = "6Fd-KI-MBs"; */
+"6Fd-KI-MBs.text" = "-";
+
+/* Class = "UITextField"; placeholder = "Entrer un texte à traduire"; ObjectID = "8kj-0v-BRb"; */
+"8kj-0v-BRb.placeholder" = "Entrer un texte à traduire";
+
+/* Class = "UITabBarItem"; title = "weather_bar_item"; ObjectID = "DFW-f4-Rni"; */
+"DFW-f4-Rni.title" = "Météo";
+
+/* Class = "UILabel"; text = "-°c"; ObjectID = "GYN-yI-Etr"; */
+"GYN-yI-Etr.text" = "-°c";
+
+/* Class = "UIButton"; normalTitle = "Traduire"; ObjectID = "MJ3-Zy-Hdm"; */
+"MJ3-Zy-Hdm.normalTitle" = "Traduire";
+
+/* Class = "UILabel"; text = "-"; ObjectID = "PFj-iX-yYm"; */
+"PFj-iX-yYm.text" = "-";
+
+/* Class = "UILabel"; text = "-"; ObjectID = "PTH-dw-D3Z"; */
+"PTH-dw-D3Z.text" = "-";
+
+/* Class = "UILabel"; text = "-°c / -°c"; ObjectID = "Pr1-jl-dXn"; */
+"Pr1-jl-dXn.text" = "-°c / -°c";
+
+/* Class = "UILabel"; text = "-°c"; ObjectID = "RBB-Vh-yVn"; */
+"RBB-Vh-yVn.text" = "-°c";
+
+/* Class = "UILabel"; text = "-°c / -°c"; ObjectID = "Sqc-DF-0bT"; */
+"Sqc-DF-0bT.text" = "-°c / -°c";
+
+/* Class = "UITextField"; placeholder = "10"; ObjectID = "YQz-w7-Obj"; */
+"YQz-w7-Obj.placeholder" = "10";
+
+/* Class = "UILabel"; text = "-"; ObjectID = "bLu-cB-Mgd"; */
+"bLu-cB-Mgd.text" = "-";
+
+/* Class = "UITextField"; placeholder = "Entrer le nom d'une ville"; ObjectID = "dE4-XV-opo"; */
+"dE4-XV-opo.placeholder" = "Entrer le nom d'une ville";
+
+/* Class = "UILabel"; text = "Auto détection"; ObjectID = "hGR-LO-hoS"; */
+"hGR-LO-hoS.text" = "Auto détection";
+
+/* Class = "UITabBarItem"; title = "translator_bar_item"; ObjectID = "q0p-hD-RHk"; */
+"q0p-hD-RHk.title" = "Traducteur";
+
+/* Class = "UILabel"; text = "-"; ObjectID = "zqs-Ep-ift"; */
+"zqs-Ep-ift.text" = "-";

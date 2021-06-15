@@ -13,16 +13,20 @@ class TranslateViewController: UIViewController {
     @IBOutlet weak var targetFlag: UIImageView!
     @IBOutlet weak var sourceTextField: UITextField!
     @IBOutlet weak var targetLabel: UILabel!
-    @IBOutlet weak var errorServiceView: UIView!
     @IBOutlet weak var translateButton: UIButton!
     @IBOutlet weak var serviceActivityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var detectSwitch: UISwitch!
+    @IBOutlet weak var swapButton: UIButton!
+    @IBOutlet weak var swapButton2: UIButton!
+    @IBOutlet weak var detectLabel: UILabel!
     
     private var manager = TranslateManager()
-    private var errorService: Bool = false
+    private var detectManager = DetectManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        addKeyboardObservers()
         initTranslateData()
         serviceActivityIndicator.stopAnimating()
     }
@@ -30,6 +34,7 @@ class TranslateViewController: UIViewController {
 
 // MARK: - Translate
 extension TranslateViewController {
+    
     @IBAction func tappedTranslateButton(_ sender: UIButton) {
         guard let text = sourceTextField.text else { return }
         manager.translateData.text = text
@@ -43,26 +48,51 @@ extension TranslateViewController {
                 self?.targetLabel.text = translation!
                 self?.hideActivityIndicator()
             }
-            if let error = error as? APIService.ServiceError {
-                if let alertVC = self?.makeAlertVC(message: error.rawValue) {
+            if error != nil {
+                if let alertVC = self?.makeAlertVC(message: Localize.translateError) {
                     self?.present(alertVC, animated: true, completion: {
                         self?.hideActivityIndicator()
                     })
                 }
-                //self?.showErrorService()
             }
         }
     }
 }
 
+// MARK: - Detect
+extension TranslateViewController {
+    
+    private func getDetection(text: String) {
+        if text != "" {
+            detectManager.detectData.text = text
+            detectManager.getDetection { [weak self] lang, error in
+                if lang != nil && error == nil {
+                    if (lang == "fr" && self?.manager.translateData.source == "en") || (lang == "en" && self?.manager.translateData.source == "fr") {
+                        self?.swapSourceTarget()
+                    }
+                }
+            }
+        }
+    }
+    
+    @IBAction func tappedDetectSwitch(_ sender: UISwitch) {
+        modifySwapButtonState()
+    }
+}
+
 // MARK: - Flags Data & Action
 extension TranslateViewController {
+    
     private func initTranslateData() {
         manager.translateData.source = "fr"
         manager.translateData.target = "en"
     }
     
     @IBAction func tappedSwapButton(_ sender: UIButton) {
+        swapSourceTarget()
+    }
+    
+    private func swapSourceTarget() {
         if manager.translateData.source == "fr" {
             sourceFlag.image = UIImage(named: "en")
             targetFlag.image = UIImage(named: "fr")
@@ -80,13 +110,44 @@ extension TranslateViewController {
             targetLabel.text = tempText
         }
     }
+    
+    private func modifySwapButtonState() {
+        if detectSwitch.isOn {
+            swapButton.isEnabled = false
+            swapButton2.isEnabled = false
+        } else {
+            swapButton.isEnabled = true
+            swapButton2.isEnabled = true
+        }
+    }
 }
-
 // MARK: - Keyboard
-extension TranslateViewController: UITextFieldDelegate {
+extension TranslateViewController {
+    
     @IBAction func dismissKeyboard(_ sender: UITapGestureRecognizer) {
         sourceTextField.resignFirstResponder()
     }
+    
+    private func addKeyboardObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc func keyboardWillShow(_ notification:Notification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue, view.frame.origin.y == 0 {
+            self.view.frame.origin.y -= keyboardSize.height / 4
+        }
+    }
+
+    @objc func keyboardWillHide(_ notification:Notification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue, view.frame.origin.y != 0 {
+            self.view.frame.origin.y += keyboardSize.height / 4
+        }
+    }
+}
+
+// MARK: - TextField
+extension TranslateViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField.text != nil && textField.text != "" {
@@ -97,12 +158,18 @@ extension TranslateViewController: UITextFieldDelegate {
     }
     
     func textFieldDidChangeSelection(_ textField: UITextField) {
-        targetLabel.text = ""
+        if textField.text != "" && detectSwitch.isOn {
+            getDetection(text: textField.text!)
+        }
+        if targetLabel.text != "" {
+            targetLabel.text = ""
+        }
     }
 }
 
 // MARK: - ActivityIndicator
 extension TranslateViewController {
+    
     private func showActivityIndicator() {
         serviceActivityIndicator.startAnimating()
         translateButton.isHidden = true
@@ -116,26 +183,10 @@ extension TranslateViewController {
 
 // MARK: - Error
 extension TranslateViewController {
-    private func showErrorService() {
-        errorService = true
-        errorServiceView.isHidden = !errorService
-        DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-            self.errorService = false
-            self.errorServiceView.isHidden = !self.errorService
-        }
-    }
     
     private func makeAlertVC(message: String) -> UIAlertController {
-        let alertVC = UIAlertController(title: "Une erreur est survenue", message: message, preferredStyle: .alert)
+        let alertVC = UIAlertController(title: Localize.errorTitle, message: message, preferredStyle: .alert)
         alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
         return alertVC
     }
 }
-
-//func getFlag() -> String {
-//        let base: UInt32 = UnicodeScalar("🇦").value - UnicodeScalar("A").value
-//
-//        return String(String.UnicodeScalarView(
-//            countryCode.unicodeScalars.compactMap({ UnicodeScalar(base + $0.value) })
-//        ))
-//    }

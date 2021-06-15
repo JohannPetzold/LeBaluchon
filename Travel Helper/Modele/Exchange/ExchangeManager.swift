@@ -38,11 +38,11 @@ class ExchangeManager {
         }
     }
     
-    func swapCurrencies(amount: Double, currency: Currencies, target: Currencies, completion: (Double) -> Void) {
+    func swapCurrencies(amount: Double, source: Currencies, target: Currencies, completion: (Double) -> Void) {
         guard exchangeJson != nil else { return }
-        guard rates[currency] != nil, rates[target] != nil else { return }
+        guard rates[source] != nil, rates[target] != nil else { return }
         
-        let result = amount * (1 / rates[currency]!) * rates[target]!
+        let result = amount * (1 / rates[source]!) * rates[target]!
         completion(result)
     }
     

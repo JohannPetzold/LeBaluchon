@@ -22,24 +22,23 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var iconDescription2: UIImageView!
     @IBOutlet weak var minMaxLabel2: UILabel!
     @IBOutlet weak var locateButton: UIButton!
-    @IBOutlet weak var errorView: UIView!
     @IBOutlet weak var cityTextField: UITextField!
     @IBOutlet weak var reloadButton: UIButton!
     
     private var locManager = CLLocationManager()
     private var myLocationCity = ""
     private var locEnable: Bool = false
-    private var errorService: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         locManager.delegate = self
-        
+        if #available(iOS 14.0, *) { } else {
+            startUpdatingLocation()
+        }
         getActualDate()
         getFirstCityWeather()
         getCurrentCityAtStart()
-        //changeStateReloadButton()
         changeStateLocateButton()
     }
 }
@@ -53,13 +52,12 @@ extension WeatherViewController {
             if data != nil && error == nil {
                 self?.changeFirstCityLabels(data: data!)
                 self?.changeStateReloadButton()
-            } else if let error = error as? APIService.ServiceError {
-                if let alertVC = self?.makeAlertVC(message: error.rawValue) {
+            } else if error != nil {
+                if let alertVC = self?.makeAlertVC(message: Localize.weatherError) {
                     self?.present(alertVC, animated: true, completion: {
                         self?.changeStateReloadButton()
                     })
                 }
-                //self?.showErrorService()
             }
         }
     }
@@ -73,11 +71,10 @@ extension WeatherViewController {
                 }
                 self?.changeStateLocateButton()
                 self?.cityTextField.text = ""
-            } else if let error = error as? APIService.ServiceError {
-                if let alertVC = self?.makeAlertVC(message: error.rawValue) {
+            } else if error != nil {
+                if let alertVC = self?.makeAlertVC(message: Localize.weatherError) {
                     self?.present(alertVC, animated: true, completion: nil)
                 }
-                //self?.showErrorService()
             }
         }
     }
@@ -183,27 +180,6 @@ extension WeatherViewController: UITextFieldDelegate {
     }
 }
 
-// MARK: - Error
-extension WeatherViewController {
-    
-    private func showErrorService() {
-        errorService = true
-        errorView.isHidden = !errorService
-        DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-            self.errorService = false
-            self.errorView.isHidden = !self.errorService
-        }
-    }
-    
-    private func makeAlertVC(message: String) -> UIAlertController {
-        let alertVC = UIAlertController(title: "Une erreur est survenue", message: message, preferredStyle: .alert)
-        alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { alert in
-            self.cityTextField.text = ""
-        }))
-        return alertVC
-    }
-}
-
 // MARK: - LocationManagerDelegate
 extension WeatherViewController: CLLocationManagerDelegate {
     
@@ -212,10 +188,29 @@ extension WeatherViewController: CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        startUpdatingLocation()
         if locManager.location != nil {
             let location = locManager.location!.coordinate
             getCurrentCityWeather(weatherData: WeatherData(lon: location.longitude, lat: location.latitude))
         }
         changeStateLocateButton()
+    }
+    
+    private func startUpdatingLocation() {
+        if CLLocationManager.authorizationStatus() == .authorizedAlways || CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
+            locManager.startUpdatingLocation()
+        }
+    }
+}
+
+// MARK: - Error
+extension WeatherViewController {
+    
+    private func makeAlertVC(message: String) -> UIAlertController {
+        let alertVC = UIAlertController(title: Localize.errorTitle, message: message, preferredStyle: .alert)
+        alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { alert in
+            self.cityTextField.text = ""
+        }))
+        return alertVC
     }
 }

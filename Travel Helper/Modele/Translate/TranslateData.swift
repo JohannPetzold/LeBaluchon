@@ -8,6 +8,7 @@
 import Foundation
 
 class TranslateData {
+    
     var text: String?
     var source: String?
     var target: String?

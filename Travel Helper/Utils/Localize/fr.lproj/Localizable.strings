@@ -1,0 +1,21 @@
+/* 
+  Localizable.strings
+  Travel Helper
+
+  Created by Johann Petzold on 14/06/2021.
+  
+*/
+
+/* Error */
+"error_title" = "Une erreur est survenue";
+"exchange_service_error" = "Impossible de récupérer les taux de change";
+"translate_service_error" = "Impossible d'obtenir la traduction";
+"weather_service_error" = "Impossible d'obtenir les données météos";
+"error_no_request" = "Requête non valide";
+"error_occured" = "Une erreur est survenue";
+"error_no_data" = "Aucune donnée récupérée";
+"error_bad_response" = "Un problème est survenu lors de la récupération des données";
+"error_decode_fail" = "Données récupérées non valides";
+
+/* General */
+"keyboard_button_close" = "Fermer";

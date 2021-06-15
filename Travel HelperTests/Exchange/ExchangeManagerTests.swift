@@ -66,7 +66,7 @@ class ExchangeManagerTests: XCTestCase {
     }
     
     func testSwapCurrenciesShouldReturnIfNoExchangeJson() {
-        ExchangeManager().swapCurrencies(amount: 10, currency: .aud, target: .eur) { result in
+        ExchangeManager().swapCurrencies(amount: 10, source: .aud, target: .eur) { result in
             XCTAssertNil(result)
         }
     }
@@ -80,7 +80,7 @@ class ExchangeManagerTests: XCTestCase {
             XCTAssertNil(error)
             
             if success {
-                session.swapCurrencies(amount: 1, currency: .eur, target: .aud) { result in
+                session.swapCurrencies(amount: 1, source: .eur, target: .aud) { result in
                     XCTAssertEqual(result, 1.575433)
                     expectation.fulfill()
                 }

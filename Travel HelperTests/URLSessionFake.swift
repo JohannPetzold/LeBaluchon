@@ -7,7 +7,14 @@
 
 import Foundation
 
+/*
+Les trois warnings présents n'ont pas pu être corrigés faute de solution trouvée.
+Les inits d'URLSession et URLSessionDataTask sont dépréciés mais fonctionnent toujours pour les tests.
+La méthode utilisée dans cette classe est celle venant du cours "Lancez des appels réseau en iOS" d'OpenClassrooms.
+*/
+
 class URLSessionFake: URLSession {
+    
     var data: Data?
     var response: URLResponse?
     var error: Error?
@@ -38,8 +45,8 @@ class URLSessionFake: URLSession {
 }
 
 class URLSessionDataTaskFake: URLSessionDataTask {
-    var completionHandler: ((Data?, URLResponse?, Error?) -> Void)?
     
+    var completionHandler: ((Data?, URLResponse?, Error?) -> Void)?
     var data: Data?
     var urlResponse: URLResponse?
     var responseError: Error?

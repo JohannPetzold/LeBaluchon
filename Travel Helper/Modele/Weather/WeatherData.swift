@@ -8,14 +8,17 @@
 import Foundation
 
 struct WeatherData {
+    
     var lon: Double?
     var lat: Double?
     var name: String?
+    var lang: String?
     
     init(lon: Double? = nil, lat: Double? = nil, name: String? = nil) {
         self.lon = lon
         self.lat = lat
         self.name = name
+        self.lang = Bundle.main.preferredLocalizations.first
     }
     
     enum DataStatus {

@@ -13,16 +13,15 @@ class ExchangeViewController: UIViewController {
     @IBOutlet weak var amountPickerView: UIPickerView!
     @IBOutlet weak var resultLabel: UILabel!
     @IBOutlet weak var resultPickerView: UIPickerView!
-    @IBOutlet weak var errorServiceView: UIView!
+    @IBOutlet weak var reloadButton: UIButton!
     
     private var resultData = Currencies.allCases
     private var exchange = ExchangeManager()
-    private var errorService: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        addButtonToKeyboard(title: "Fermer")
+        addButtonToKeyboard(title: Localize.buttonClose)
         addKeyboardObservers()
         getService()
         updateResultData()
@@ -31,14 +30,20 @@ class ExchangeViewController: UIViewController {
 
 // MARK: - Service
 extension ExchangeViewController {
+    
     private func getService() {
         exchange.getExchange { [weak self] success, error in
-            if let error = error as? APIService.ServiceError {
-                self?.errorService = true
-                if let alertVC = self?.makeAlertVC(message: error.rawValue) {
-                    self?.present(alertVC, animated: true, completion: nil)
+            guard let self = self else { return }
+            if success {
+                self.showErrorButton(false)
+                if self.amountTextField.text != "" {
+                    self.exchangeCurrency()
                 }
-                self?.showErrorService()
+            }
+            if error != nil {
+                let alertVC = self.makeAlertVC(message: Localize.exchangeError)
+                self.present(alertVC, animated: true, completion: nil)
+                self.showErrorButton(true)
             }
         }
     }
@@ -46,23 +51,27 @@ extension ExchangeViewController {
 
 // MARK: - Exchange
 extension ExchangeViewController {
+    
     @IBAction func tappedSwapCurrencies(_ sender: UIButton) {
         swapPickerCurrencies()
         exchangeCurrency()
     }
     
+    /* resultData contient toutes les devises sauf celle choisie dans le premier picker */
     private func updateResultData() {
         resultData = Currencies.allCases.filter({ currency in
-            return currency != Currencies.allCases[amountPickerView.selectedRow(inComponent: 0)]
+            return currency != getCurrencyFromPicker(amountPickerView)
         })
     }
     
+    /* Réinitialise l'affichage du resultPicker */
     private func reloadResultPicker() {
         updateResultData()
         resultPickerView.reloadComponent(0)
         resultPickerView.selectRow(0, inComponent: 0, animated: true)
     }
     
+    /* Echange les données des deux PickerView en respectant les index */
     private func swapPickerCurrencies() {
         let amountIndex = amountPickerView.selectedRow(inComponent: 0)
         let resultIndex = Currencies.allCases.firstIndex(of: resultData[resultPickerView.selectedRow(inComponent: 0)])!
@@ -75,10 +84,10 @@ extension ExchangeViewController {
         resultPickerView.selectRow(updateAmountIndex, inComponent: 0, animated: true)
     }
     
-    private func getCurrencyFromPicker(tag: Int) -> Currencies? {
-        if tag == 0 {
+    private func getCurrencyFromPicker(_ picker: UIPickerView) -> Currencies? {
+        if picker == amountPickerView {
             return Currencies.allCases[amountPickerView.selectedRow(inComponent: 0)]
-        } else if tag == 1 {
+        } else if picker == resultPickerView {
             return Currencies.allCases[Currencies.allCases.firstIndex(of: resultData[resultPickerView.selectedRow(inComponent: 0)])!]
         }
         return nil
@@ -87,9 +96,9 @@ extension ExchangeViewController {
     private func exchangeCurrency() {
         guard let text = amountTextField.text else { return }
         guard let amount = Double(text) else { resultLabel.text = ""; return }
-        let currency = getCurrencyFromPicker(tag: amountPickerView.tag)!
-        let target = getCurrencyFromPicker(tag: resultPickerView.tag)!
-        exchange.swapCurrencies(amount: amount, currency: currency, target: target) { result in
+        let source = getCurrencyFromPicker(amountPickerView)!
+        let target = getCurrencyFromPicker(resultPickerView)!
+        exchange.swapCurrencies(amount: amount, source: source, target: target) { result in
             resultLabel.text = String(format: "%.2f", result)
         }
     }
@@ -97,6 +106,7 @@ extension ExchangeViewController {
 
 // MARK: - PickerView
 extension ExchangeViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+    
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
@@ -119,7 +129,7 @@ extension ExchangeViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         if pickerView == amountPickerView {
             reloadResultPicker()
         }
-        if amountTextField.text != nil {
+        if amountTextField.text != nil && amountTextField.text != "" {
             exchangeCurrency()
         }
     }
@@ -136,6 +146,7 @@ extension ExchangeViewController: UITextFieldDelegate {
         exchangeCurrency()
     }
     
+    /* Limite l'entrée de l'utilisateur à 1 . et 2 décimales */
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if string == "" {
             return true
@@ -195,16 +206,17 @@ extension ExchangeViewController: UITextFieldDelegate {
 
 // MARK: - Error
 extension ExchangeViewController {
+    
     @IBAction func tappedRetryService(_ sender: UIButton) {
         getService()
     }
     
-    private func showErrorService() {
-        errorServiceView.isHidden = !errorService
+    private func showErrorButton(_ show: Bool) {
+        reloadButton.isHidden = !show
     }
     
     private func makeAlertVC(message: String) -> UIAlertController {
-        let alertVC = UIAlertController(title: "Une erreur est survenue", message: message, preferredStyle: .alert)
+        let alertVC = UIAlertController(title: Localize.errorTitle, message: message, preferredStyle: .alert)
         alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
         return alertVC
     }

@@ -46,7 +46,12 @@ class WeatherManager {
         }
         body["appid"] = WEATHER_KEY
         body["units"] = "metric"
-        body["lang"] = "fr"
+        if location.lang == "fr" {
+            body["lang"] = "fr"
+        } else {
+            body["lang"] = "en"
+        }
+        
         
         return RequestData(urlString: .weather, http: .get, body: body)
     }

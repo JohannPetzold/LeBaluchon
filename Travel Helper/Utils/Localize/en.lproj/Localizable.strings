@@ -1,0 +1,21 @@
+/* 
+  Localizable.strings
+  Travel Helper
+
+  Created by Johann Petzold on 14/06/2021.
+  
+*/
+
+/* Error */
+"error_title" = "An error occurred";
+"exchange_service_error" = "Unable to get exchange rate";
+"translate_service_error" = "Unable to get translation";
+"weather_service_error" = "Unable to get weather data";
+"error_no_request" = "Invalid request";
+"error_occurred" = "An error occurred";
+"error_no_data" = "No data";
+"error_bad_response" = "An error occurred during data download";
+"error_decode_fail" = "No valid data";
+
+/* General */
+"keyboard_button_close" = "Close";

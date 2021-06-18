@@ -15,41 +15,28 @@ class ExchangeManagerTests: XCTestCase {
     func testGetExchangeShouldGetErrorWhenUsingError() {
         let session = ExchangeManager(service: APIServiceMock(data: nil, error: ResponseDataMock.error))
         
-        let expectation = XCTestExpectation(description: "Wait for queue change")
         session.getExchange { success, error in
             XCTAssertFalse(success)
             XCTAssertNotNil(error)
-            expectation.fulfill()
         }
-        
-        wait(for: [expectation], timeout: 0.01)
     }
     
     func testGetExchangeShouldGetErrorWhenUsingBadData() {
         let session = ExchangeManager(service: APIServiceMock(data: ResponseDataMock.incorrectData, error: nil))
         
-        let expectation = XCTestExpectation(description: "Wait for queue change")
         session.getExchange { success, error in
             XCTAssertFalse(success)
             XCTAssertNotNil(error)
-            expectation.fulfill()
         }
-        
-        wait(for: [expectation], timeout: 0.01)
     }
     
     func testGetExchangeShouldGetSuccessWhenUsingGoodData() {
         let session = ExchangeManager(service: APIServiceMock(data: ResponseDataMock.correctData(filename: filename), error: nil))
         
-        let expectation = XCTestExpectation(description: "Wait for queue change")
         session.getExchange { success, error in
             XCTAssertTrue(success)
             XCTAssertNil(error)
-            
-            expectation.fulfill()
         }
-        
-        wait(for: [expectation], timeout: 0.01)
     }
     
     func testSwapCurrenciesShouldReturnIfNoExchangeJson() {
@@ -61,7 +48,6 @@ class ExchangeManagerTests: XCTestCase {
     func testSwapCurrenciesShouldReturnResultIfGoodData() {
         let session = ExchangeManager(service: APIServiceMock(data: ResponseDataMock.correctData(filename: filename), error: nil))
         
-        let expectation = XCTestExpectation(description: "Wait for queue change")
         session.getExchange { success, error in
             XCTAssertTrue(success)
             XCTAssertNil(error)
@@ -69,10 +55,8 @@ class ExchangeManagerTests: XCTestCase {
             if success {
                 session.swapCurrencies(amount: 1, source: .eur, target: .aud) { result in
                     XCTAssertEqual(result, 1.575433)
-                    expectation.fulfill()
                 }
             }
         }
-        wait(for: [expectation], timeout: 0.01)
     }
 }

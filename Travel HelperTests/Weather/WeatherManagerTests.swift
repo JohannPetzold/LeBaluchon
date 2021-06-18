@@ -27,61 +27,41 @@ class WeatherManagerTests: XCTestCase {
         let session = WeatherManager(service: APIServiceMock(data: nil, error: ResponseDataMock.error))
         
         session.weatherData = weatherData
-        let expectation = XCTestExpectation(description: "Wait for queue change")
         session.getWeather() { result, error in
             XCTAssertNil(result)
             XCTAssertNotNil(error)
-            expectation.fulfill()
         }
-        
-        wait(for: [expectation], timeout: 0.01)
     }
     
     func testGetWeatherShouldGetErrorWhenUsingBadData() {
         let session = WeatherManager(service: APIServiceMock(data: ResponseDataMock.incorrectData, error: nil))
         
         session.weatherData = weatherData
-        let expectation = XCTestExpectation(description: "Wait for queue change")
         session.getWeather() { result, error in
             XCTAssertNil(result)
             XCTAssertNotNil(error)
-            expectation.fulfill()
         }
-        
-        wait(for: [expectation], timeout: 0.01)
     }
     
     func testGetWeatherShouldGetResultWhenUsingGoodData() {
         let session = WeatherManager(service: APIServiceMock(data: ResponseDataMock.correctData(filename: filename), error: nil))
 
         session.weatherData = weatherData
-        let expectation = XCTestExpectation(description: "Wait for queue change")
         session.getWeather() { result, error in
             XCTAssertNotNil(result)
             XCTAssertNil(error)
-            
             XCTAssertEqual(result!.name, "Mountain View")
-            
-            expectation.fulfill()
         }
-        
-        wait(for: [expectation], timeout: 0.01)
     }
     
     func testGetWeatherShouldGetResultWhenUsingGoodDataWithCoord() {
         let session = WeatherManager(service: APIServiceMock(data: ResponseDataMock.correctData(filename: filename), error: nil))
         
         session.weatherData = weatherDataCoord
-        let expectation = XCTestExpectation(description: "Wait for queue change")
         session.getWeather() { result, error in
             XCTAssertNotNil(result)
             XCTAssertNil(error)
-            
             XCTAssertEqual(result!.name, "Mountain View")
-            
-            expectation.fulfill()
         }
-        
-        wait(for: [expectation], timeout: 0.01)
     }
 }

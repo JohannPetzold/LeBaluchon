@@ -173,15 +173,12 @@
 		404C6E9526565BC3002A6A68 /* Travel HelperTests */ = {
 			isa = PBXGroup;
 			children = (
-				408A65F4267CB25D00E11074 /* NetworkSessionMock.swift */,
-				406E0742265AC4B500B9EB48 /* ResponseDataMock.swift */,
-				406DFA37267BAFD200B11C84 /* APIServiceMock.swift */,
+				40AD2DFF267CE95F00473DB5 /* Utils */,
 				40D4788B2667BDE2006CFB07 /* APIServiceTests.swift */,
 				407B98FF2669217C00A18CD4 /* DateExtensionTests.swift */,
 				40CC2208265C1A4900AC3505 /* Exchange */,
 				404FF19E265FD83000D0B713 /* Translate */,
 				407E4BB82667DA11009956C8 /* Weather */,
-				404C6E9826565BC3002A6A68 /* Info.plist */,
 			);
 			path = "Travel HelperTests";
 			sourceTree = "<group>";
@@ -285,6 +282,17 @@
 				407E4BB92667DA26009956C8 /* Weather.json */,
 			);
 			path = Weather;
+			sourceTree = "<group>";
+		};
+		40AD2DFF267CE95F00473DB5 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				404C6E9826565BC3002A6A68 /* Info.plist */,
+				408A65F4267CB25D00E11074 /* NetworkSessionMock.swift */,
+				406E0742265AC4B500B9EB48 /* ResponseDataMock.swift */,
+				406DFA37267BAFD200B11C84 /* APIServiceMock.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 		40CC2208265C1A4900AC3505 /* Exchange */ = {
@@ -650,7 +658,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = "Travel HelperTests/Info.plist";
+				INFOPLIST_FILE = "Travel HelperTests/Utils/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -671,7 +679,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = "Travel HelperTests/Info.plist";
+				INFOPLIST_FILE = "Travel HelperTests/Utils/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

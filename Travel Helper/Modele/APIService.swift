@@ -12,46 +12,19 @@ class APIService {
     static var shared = APIService()
     private init() { }
     
-    private var task: URLSessionDataTask?
+    private var session: NetworkSession = URLSession.shared
     
-    private var session = URLSession(configuration: .default)
-    
-    enum ServiceError: Error {
-        case noRequest
-        case errorOccurred
-        case noData
-        case badResponse
-        case decodeFail
-        
-        var description: String {
-            switch(self) {
-            case .noRequest:
-                return Localize.noRequestError
-            case .errorOccurred:
-                return Localize.occurredError
-            case .noData:
-                return Localize.noDataError
-            case .badResponse:
-                return Localize.badResponseError
-            case .decodeFail:
-                return Localize.decodeFailError
-            }
-        }
-    }
-    
-    init(session: URLSession) {
+    init(session: NetworkSession = URLSession.shared) {
         self.session = session
     }
     
-    /* Renvoi Data ou Error selon les retours de la requête */
     func makeRequest(requestData: RequestData, completion: @escaping (_ result: Data?, _ error: Error?) -> Void) {
         guard let request = createRequest(requestData: requestData) else {
             completion(nil, ServiceError.noRequest)
             return
         }
         
-        task?.cancel()
-        task = session.dataTask(with: request, completionHandler: { data, response, error in
+        session.loadData(from: request, completionHandler: { data, response, error in
             DispatchQueue.main.async {
                 guard let data = data, error == nil else {
                     completion(nil, ServiceError.errorOccurred)
@@ -64,10 +37,8 @@ class APIService {
                 completion(data, nil)
             }
         })
-        task?.resume()
     }
     
-    /* Crée un URLRequest à partir des données transmises */
     private func createRequest(requestData: RequestData) -> URLRequest? {
         if requestData.status == .valid {
             if var components = URLComponents(string: requestData.urlString!.rawValue) {

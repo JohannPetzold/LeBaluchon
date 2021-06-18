@@ -14,7 +14,7 @@ class DetectManagerTests: XCTestCase {
     let detectData = DetectData(text: "Hello")
 
     func testGetDetectionShouldGetErrorWhenNoDetectData() {
-        let session = DetectManager(session: URLSessionFake(data: nil, response: nil, error: FakeResponseData.error))
+        let session = DetectManager(service: APIServiceMock(data: nil, error: nil))
         
         session.getDetection { detection, error in
             XCTAssertNil(detection)
@@ -23,21 +23,7 @@ class DetectManagerTests: XCTestCase {
     }
     
     func testGetDetectionShouldGetErrorWhenUsingError() {
-        let session = DetectManager(session: URLSessionFake(data: nil, response: nil, error: FakeResponseData.error))
-        session.detectData = detectData
-        
-        let expectation = XCTestExpectation(description: "Wait for queue change")
-        session.getDetection { detection, error in
-            XCTAssertNil(detection)
-            XCTAssertNotNil(error)
-            expectation.fulfill()
-        }
-        
-        wait(for: [expectation], timeout: 0.01)
-    }
-    
-    func testGetDetectionShouldGetErrorWhenUsingBadResponse() {
-        let session = DetectManager(session: URLSessionFake(data: nil, response: FakeResponseData.responseKO, error: nil))
+        let session = DetectManager(service: APIServiceMock(data: nil, error: ResponseDataMock.error))
         session.detectData = detectData
         
         let expectation = XCTestExpectation(description: "Wait for queue change")
@@ -51,7 +37,7 @@ class DetectManagerTests: XCTestCase {
     }
     
     func testGetDetectionShouldGetErrorWhenUsingBadData() {
-        let session = DetectManager(session: URLSessionFake(data: FakeResponseData.incorrectData, response: FakeResponseData.responseOK, error: nil))
+        let session = DetectManager(service: APIServiceMock(data: ResponseDataMock.incorrectData, error: nil))
         session.detectData = detectData
         
         let expectation = XCTestExpectation(description: "Wait for queue change")
@@ -65,7 +51,7 @@ class DetectManagerTests: XCTestCase {
     }
     
     func testGetDetectionShouldGetErrorWhenUsingGoodData() {
-        let session = DetectManager(session: URLSessionFake(data: FakeResponseData.correctData(filename: filename), response: FakeResponseData.responseOK, error: nil))
+        let session = DetectManager(service: APIServiceMock(data: ResponseDataMock.correctData(filename: filename), error: nil))
         session.detectData = detectData
         
         let expectation = XCTestExpectation(description: "Wait for queue change")

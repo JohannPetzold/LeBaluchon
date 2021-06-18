@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TranslateViewController: UIViewController {
+class TranslateViewController: MainViewController {
 
     @IBOutlet weak var sourceFlag: UIImageView!
     @IBOutlet weak var targetFlag: UIImageView!
@@ -26,6 +26,7 @@ class TranslateViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        keyboardDivideValue = 4
         addKeyboardObservers()
         initTranslateData()
         serviceActivityIndicator.stopAnimating()
@@ -44,16 +45,21 @@ extension TranslateViewController {
     private func getTranslation() {
         showActivityIndicator()
         manager.getTranslation { [weak self] translation, error in
+            guard let self = self else { return }
             if translation != nil && error == nil {
-                self?.targetLabel.text = translation!
-                self?.hideActivityIndicator()
-            }
-            if error != nil {
-                if let alertVC = self?.makeAlertVC(message: Localize.translateError) {
-                    self?.present(alertVC, animated: true, completion: {
-                        self?.hideActivityIndicator()
-                    })
+                self.targetLabel.text = translation!
+                self.hideActivityIndicator()
+            } else if let error = error as? ServiceError {
+                var errorMessage: String
+                switch error {
+                case .noData: errorMessage = Localize.translateErrorNoData
+                case .decodeFail: errorMessage = Localize.translateErrorDecodeFail
+                default: errorMessage = Localize.translateError
                 }
+                let alertVC = self.makeAlertVC(message: errorMessage)
+                self.present(alertVC, animated: true, completion: {
+                    self.hideActivityIndicator()
+                })
             }
         }
     }
@@ -66,9 +72,10 @@ extension TranslateViewController {
         if text != "" {
             detectManager.detectData.text = text
             detectManager.getDetection { [weak self] lang, error in
+                guard let self = self else { return }
                 if lang != nil && error == nil {
-                    if (lang == "fr" && self?.manager.translateData.source == "en") || (lang == "en" && self?.manager.translateData.source == "fr") {
-                        self?.swapSourceTarget()
+                    if (lang == "fr" && self.manager.translateData.source == "en") || (lang == "en" && self.manager.translateData.source == "fr") {
+                        self.swapSourceTarget()
                     }
                 }
             }
@@ -127,23 +134,6 @@ extension TranslateViewController {
     @IBAction func dismissKeyboard(_ sender: UITapGestureRecognizer) {
         sourceTextField.resignFirstResponder()
     }
-    
-    private func addKeyboardObservers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    @objc func keyboardWillShow(_ notification:Notification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue, view.frame.origin.y == 0 {
-            self.view.frame.origin.y -= keyboardSize.height / 4
-        }
-    }
-
-    @objc func keyboardWillHide(_ notification:Notification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue, view.frame.origin.y != 0 {
-            self.view.frame.origin.y += keyboardSize.height / 4
-        }
-    }
 }
 
 // MARK: - TextField
@@ -178,15 +168,5 @@ extension TranslateViewController {
     private func hideActivityIndicator() {
         serviceActivityIndicator.stopAnimating()
         translateButton.isHidden = false
-    }
-}
-
-// MARK: - Error
-extension TranslateViewController {
-    
-    private func makeAlertVC(message: String) -> UIAlertController {
-        let alertVC = UIAlertController(title: Localize.errorTitle, message: message, preferredStyle: .alert)
-        alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-        return alertVC
     }
 }

@@ -11,7 +11,12 @@ import XCTest
 class DateExtensionTests: XCTestCase {
 
     func testDateString() {
-        XCTAssertEqual(Date(timeIntervalSince1970: 1000000000).dateString(), "September 9, 2001")
+        if Bundle.main.preferredLocalizations.first == "fr" {
+            XCTAssertEqual(Date(timeIntervalSince1970: 1000000000).dateString(), "9 Septembre 2001")
+        } else {
+            XCTAssertEqual(Date(timeIntervalSince1970: 1000000000).dateString(), "September 9, 2001")
+        }
+        
     }
 
 }

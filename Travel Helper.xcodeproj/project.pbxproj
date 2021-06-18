@@ -22,9 +22,11 @@
 		404FF19D265E7D7300D0B713 /* TranslateData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 404FF19C265E7D7300D0B713 /* TranslateData.swift */; };
 		404FF1A4265FD8EF00D0B713 /* Translate.json in Resources */ = {isa = PBXBuildFile; fileRef = 404FF1A3265FD8EF00D0B713 /* Translate.json */; };
 		40631F69266908B300652CEC /* WeatherManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40631F68266908B300652CEC /* WeatherManagerTests.swift */; };
+		406DFA36267BA7ED00B11C84 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406DFA35267BA7ED00B11C84 /* MainViewController.swift */; };
+		406DFA38267BAFD200B11C84 /* APIServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406DFA37267BAFD200B11C84 /* APIServiceMock.swift */; };
+		406DFA3A267BB5EC00B11C84 /* ServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406DFA39267BB5EC00B11C84 /* ServiceError.swift */; };
 		406E0741265AC47A00B9EB48 /* Exchange.json in Resources */ = {isa = PBXBuildFile; fileRef = 406E0740265AC47A00B9EB48 /* Exchange.json */; };
-		406E0743265AC4B500B9EB48 /* FakeResponseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406E0742265AC4B500B9EB48 /* FakeResponseData.swift */; };
-		406E0745265AC5DE00B9EB48 /* URLSessionFake.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406E0744265AC5DE00B9EB48 /* URLSessionFake.swift */; };
+		406E0743265AC4B500B9EB48 /* ResponseDataMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406E0742265AC4B500B9EB48 /* ResponseDataMock.swift */; };
 		406E0747265B03A700B9EB48 /* Currencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406E0746265B03A700B9EB48 /* Currencies.swift */; };
 		40708B0526668E1000D1138D /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40708B0426668E1000D1138D /* APIService.swift */; };
 		40708B072666936500D1138D /* RequestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40708B062666936500D1138D /* RequestData.swift */; };
@@ -36,6 +38,8 @@
 		407E4BC02667FDA5009956C8 /* WeatherData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 407E4BBF2667FDA5009956C8 /* WeatherData.swift */; };
 		407E4BC226681223009956C8 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 407E4BC126681223009956C8 /* DateExtension.swift */; };
 		4080B5CB265BB5DA007324C7 /* ExchangeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4080B5CA265BB5DA007324C7 /* ExchangeManager.swift */; };
+		408A65F3267CB03C00E11074 /* URLSessionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 408A65F2267CB03C00E11074 /* URLSessionExtension.swift */; };
+		408A65F5267CB25D00E11074 /* NetworkSessionMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 408A65F4267CB25D00E11074 /* NetworkSessionMock.swift */; };
 		40B6350226789FC5000D79EF /* DetectManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40B6350126789FC4000D79EF /* DetectManagerTests.swift */; };
 		40B635042678A014000D79EF /* Detect.json in Resources */ = {isa = PBXBuildFile; fileRef = 40B635032678A014000D79EF /* Detect.json */; };
 		40CA9E45267252480056FD39 /* DetectData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CA9E44267252480056FD39 /* DetectData.swift */; };
@@ -79,9 +83,11 @@
 		404FF19C265E7D7300D0B713 /* TranslateData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateData.swift; sourceTree = "<group>"; };
 		404FF1A3265FD8EF00D0B713 /* Translate.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Translate.json; sourceTree = "<group>"; };
 		40631F68266908B300652CEC /* WeatherManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherManagerTests.swift; sourceTree = "<group>"; };
+		406DFA35267BA7ED00B11C84 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		406DFA37267BAFD200B11C84 /* APIServiceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIServiceMock.swift; sourceTree = "<group>"; };
+		406DFA39267BB5EC00B11C84 /* ServiceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceError.swift; sourceTree = "<group>"; };
 		406E0740265AC47A00B9EB48 /* Exchange.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Exchange.json; sourceTree = "<group>"; };
-		406E0742265AC4B500B9EB48 /* FakeResponseData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeResponseData.swift; sourceTree = "<group>"; };
-		406E0744265AC5DE00B9EB48 /* URLSessionFake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionFake.swift; sourceTree = "<group>"; };
+		406E0742265AC4B500B9EB48 /* ResponseDataMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseDataMock.swift; sourceTree = "<group>"; };
 		406E0746265B03A700B9EB48 /* Currencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Currencies.swift; sourceTree = "<group>"; };
 		40708B0426668E1000D1138D /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		40708B062666936500D1138D /* RequestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestData.swift; sourceTree = "<group>"; };
@@ -93,6 +99,8 @@
 		407E4BBF2667FDA5009956C8 /* WeatherData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherData.swift; sourceTree = "<group>"; };
 		407E4BC126681223009956C8 /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
 		4080B5CA265BB5DA007324C7 /* ExchangeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeManager.swift; sourceTree = "<group>"; };
+		408A65F2267CB03C00E11074 /* URLSessionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionExtension.swift; sourceTree = "<group>"; };
+		408A65F4267CB25D00E11074 /* NetworkSessionMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkSessionMock.swift; sourceTree = "<group>"; };
 		40B6350126789FC4000D79EF /* DetectManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectManagerTests.swift; sourceTree = "<group>"; };
 		40B635032678A014000D79EF /* Detect.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Detect.json; sourceTree = "<group>"; };
 		40BDA6E126726B3C00D246A8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Main.strings; sourceTree = "<group>"; };
@@ -165,8 +173,9 @@
 		404C6E9526565BC3002A6A68 /* Travel HelperTests */ = {
 			isa = PBXGroup;
 			children = (
-				406E0744265AC5DE00B9EB48 /* URLSessionFake.swift */,
-				406E0742265AC4B500B9EB48 /* FakeResponseData.swift */,
+				408A65F4267CB25D00E11074 /* NetworkSessionMock.swift */,
+				406E0742265AC4B500B9EB48 /* ResponseDataMock.swift */,
+				406DFA37267BAFD200B11C84 /* APIServiceMock.swift */,
 				40D4788B2667BDE2006CFB07 /* APIServiceTests.swift */,
 				407B98FF2669217C00A18CD4 /* DateExtensionTests.swift */,
 				40CC2208265C1A4900AC3505 /* Exchange */,
@@ -182,7 +191,9 @@
 			children = (
 				404FF19A265E624800D0B713 /* APIKey.swift */,
 				40708B0426668E1000D1138D /* APIService.swift */,
+				406DFA39267BB5EC00B11C84 /* ServiceError.swift */,
 				40708B062666936500D1138D /* RequestData.swift */,
+				408A65F2267CB03C00E11074 /* URLSessionExtension.swift */,
 				407E4BC126681223009956C8 /* DateExtension.swift */,
 				404C6EB326565C59002A6A68 /* Exchange */,
 				404C6EB426565C61002A6A68 /* Translate */,
@@ -203,6 +214,7 @@
 		404C6EB126565BF9002A6A68 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				406DFA35267BA7ED00B11C84 /* MainViewController.swift */,
 				404C6EBE26565E08002A6A68 /* ExchangeViewController.swift */,
 				404C6EC026565E11002A6A68 /* TranslateViewController.swift */,
 				404C6EC226565E16002A6A68 /* WeatherViewController.swift */,
@@ -390,7 +402,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				406DFA3A267BB5EC00B11C84 /* ServiceError.swift in Sources */,
 				40CA9E49267253260056FD39 /* DetectManager.swift in Sources */,
+				406DFA36267BA7ED00B11C84 /* MainViewController.swift in Sources */,
 				40708B0526668E1000D1138D /* APIService.swift in Sources */,
 				406E0747265B03A700B9EB48 /* Currencies.swift in Sources */,
 				404C6E8026565BC2002A6A68 /* AppDelegate.swift in Sources */,
@@ -403,6 +417,7 @@
 				40184DF92677D481000B1A1F /* Localize.swift in Sources */,
 				404C6E8226565BC2002A6A68 /* SceneDelegate.swift in Sources */,
 				40D4788A2667B3C0006CFB07 /* TranslateManager.swift in Sources */,
+				408A65F3267CB03C00E11074 /* URLSessionExtension.swift in Sources */,
 				407E4BBE2667FCB5009956C8 /* WeatherManager.swift in Sources */,
 				404C6EC326565E16002A6A68 /* WeatherViewController.swift in Sources */,
 				4080B5CB265BB5DA007324C7 /* ExchangeManager.swift in Sources */,
@@ -422,11 +437,12 @@
 				40D4788C2667BDE2006CFB07 /* APIServiceTests.swift in Sources */,
 				40D478902667C976006CFB07 /* TranslateManagerTests.swift in Sources */,
 				40B6350226789FC5000D79EF /* DetectManagerTests.swift in Sources */,
+				406DFA38267BAFD200B11C84 /* APIServiceMock.swift in Sources */,
 				40631F69266908B300652CEC /* WeatherManagerTests.swift in Sources */,
 				407B99002669217C00A18CD4 /* DateExtensionTests.swift in Sources */,
-				406E0743265AC4B500B9EB48 /* FakeResponseData.swift in Sources */,
+				406E0743265AC4B500B9EB48 /* ResponseDataMock.swift in Sources */,
+				408A65F5267CB25D00E11074 /* NetworkSessionMock.swift in Sources */,
 				40D4788E2667C3C3006CFB07 /* ExchangeManagerTests.swift in Sources */,
-				406E0745265AC5DE00B9EB48 /* URLSessionFake.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -605,7 +621,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.johannpetzold.Travel-Helper";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -624,7 +640,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.johannpetzold.Travel-Helper";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

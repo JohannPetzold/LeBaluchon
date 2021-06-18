@@ -8,7 +8,7 @@
 import UIKit
 import MapKit
 
-class WeatherViewController: UIViewController {
+class WeatherViewController: MainViewController {
     
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var cityNameLabel1: UILabel!
@@ -26,6 +26,7 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var reloadButton: UIButton!
     
     private var locManager = CLLocationManager()
+    private var weatherManager = WeatherManager()
     private var myLocationCity = ""
     private var locEnable: Bool = false
     
@@ -37,8 +38,7 @@ class WeatherViewController: UIViewController {
             startUpdatingLocation()
         }
         getActualDate()
-        getFirstCityWeather()
-        getCurrentCityAtStart()
+        getCityWeather(atStart: true)
         changeStateLocateButton()
     }
 }
@@ -46,43 +46,71 @@ class WeatherViewController: UIViewController {
 // MARK: - Service
 extension WeatherViewController {
     
-    private func getFirstCityWeather() {
-        let nyData = WeatherData(name: "New York")
-        WeatherManager().getWeather(location: nyData) { [weak self] data, error in
+    private func getCityWeather(atStart: Bool) {
+        weatherManager.weatherData.name = "New York"
+        weatherManager.getWeather() { [weak self] data, error in
+            guard let self = self else { return }
             if data != nil && error == nil {
-                self?.changeFirstCityLabels(data: data!)
-                self?.changeStateReloadButton()
-            } else if error != nil {
-                if let alertVC = self?.makeAlertVC(message: Localize.weatherError) {
-                    self?.present(alertVC, animated: true, completion: {
-                        self?.changeStateReloadButton()
-                    })
+                self.changeFirstCityLabels(data: data!)
+                self.changeStateReloadButton()
+                if atStart {
+                    self.getCurrentCityAtStart()
                 }
-            }
-        }
-    }
-    
-    private func getCurrentCityWeather(weatherData: WeatherData) {
-        WeatherManager().getWeather(location: weatherData) { [weak self] data, error in
-            if data != nil && error == nil {
-                self?.changeSecondCityLabels(data: data!)
-                if weatherData.status == .validCoord {
-                    self?.myLocationCity = (self?.cityNameLabel2.text!)!
+            } else if let error = error as? ServiceError {
+                var errorMessage: String
+                switch error {
+                case .noData: errorMessage = Localize.weatherErrorNoData
+                case .decodeFail: errorMessage = Localize.weatherErrorDecodeFail
+                default: errorMessage = Localize.weatherErrorFirstCity
                 }
-                self?.changeStateLocateButton()
-                self?.cityTextField.text = ""
-            } else if error != nil {
-                if let alertVC = self?.makeAlertVC(message: Localize.weatherError) {
-                    self?.present(alertVC, animated: true, completion: nil)
-                }
+                let alertVC = self.makeAlertVC(message: errorMessage)
+                self.present(alertVC, animated: true, completion: {
+                    self.changeStateReloadButton()
+                })
             }
         }
     }
     
     private func getCurrentCityAtStart() {
         guard let location = locManager.location?.coordinate else { return }
-        let data = WeatherData(lon: location.longitude, lat: location.latitude)
-        getCurrentCityWeather(weatherData: data)
+        getWeatherFromCoord(location: location)
+    }
+    
+    private func getCurrentCityWeather() {
+        weatherManager.getWeather() { [weak self] data, error in
+            guard let self = self else { return }
+            if data != nil && error == nil {
+                self.changeSecondCityLabels(data: data!)
+                if self.weatherManager.weatherData.status == .validCoord {
+                    self.myLocationCity = (self.cityNameLabel2.text!)
+                }
+                self.changeStateLocateButton()
+                self.cityTextField.text = ""
+            } else if let error = error as? ServiceError {
+                var errorMessage: String
+                switch error {
+                case .noData: errorMessage = Localize.weatherErrorNoData
+                case .decodeFail: errorMessage = Localize.weatherErrorDecodeFail
+                default: errorMessage = Localize.weatherError
+                }
+                let alertVC = self.makeAlertVC(message: errorMessage)
+                self.present(alertVC, animated: true, completion: {
+                    self.cityTextField.text = ""
+                })
+            }
+        }
+    }
+    
+    private func getWeatherFromText() {
+        if cityTextField.text != "" {
+            weatherManager.weatherData = WeatherData(name: cityTextField.text)
+            getCurrentCityWeather()
+        }
+    }
+    
+    private func getWeatherFromCoord(location: CLLocationCoordinate2D) {
+        weatherManager.weatherData = WeatherData(lon: location.longitude, lat: location.latitude)
+        getCurrentCityWeather()
     }
 }
 
@@ -120,7 +148,7 @@ extension WeatherViewController {
 extension WeatherViewController {
     
     @IBAction func tappedReloadButton(_ sender: UIButton) {
-        getFirstCityWeather()
+        getCityWeather(atStart: false)
     }
     
     private func changeStateReloadButton() {
@@ -142,7 +170,7 @@ extension WeatherViewController {
             locManager.requestWhenInUseAuthorization()
         } else {
             guard let location = locManager.location?.coordinate else { return }
-            getCurrentCityWeather(weatherData: WeatherData(lon: location.longitude, lat: location.latitude))
+            getWeatherFromCoord(location: location)
         }
     }
     
@@ -166,16 +194,12 @@ extension WeatherViewController {
 extension WeatherViewController: UITextFieldDelegate {
     
     @IBAction func dismissKeyboard(_ sender: UITapGestureRecognizer) {
-        if cityTextField.text != "" {
-            getCurrentCityWeather(weatherData: WeatherData(name: cityTextField.text))
-        }
+        getWeatherFromText()
         cityTextField.resignFirstResponder()
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if cityTextField.text != "" {
-            getCurrentCityWeather(weatherData: WeatherData(name: cityTextField.text))
-        }
+        getWeatherFromText()
         return textField.resignFirstResponder()
     }
 }
@@ -191,7 +215,7 @@ extension WeatherViewController: CLLocationManagerDelegate {
         startUpdatingLocation()
         if locManager.location != nil {
             let location = locManager.location!.coordinate
-            getCurrentCityWeather(weatherData: WeatherData(lon: location.longitude, lat: location.latitude))
+            getWeatherFromCoord(location: location)
         }
         changeStateLocateButton()
     }
@@ -200,17 +224,5 @@ extension WeatherViewController: CLLocationManagerDelegate {
         if CLLocationManager.authorizationStatus() == .authorizedAlways || CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
             locManager.startUpdatingLocation()
         }
-    }
-}
-
-// MARK: - Error
-extension WeatherViewController {
-    
-    private func makeAlertVC(message: String) -> UIAlertController {
-        let alertVC = UIAlertController(title: Localize.errorTitle, message: message, preferredStyle: .alert)
-        alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { alert in
-            self.cityTextField.text = ""
-        }))
-        return alertVC
     }
 }

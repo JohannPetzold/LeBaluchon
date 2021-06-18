@@ -8,11 +8,18 @@
 
 /* Error */
 "error_title" = "Une erreur est survenue";
-"exchange_service_error" = "Impossible de récupérer les taux de change";
-"translate_service_error" = "Impossible d'obtenir la traduction";
-"weather_service_error" = "Impossible d'obtenir les données météos";
+"exchange_error" = "Impossible de récupérer les taux de change";
+"exchange_error_no_data" = "Aucune donnée de taux de change récupérée";
+"exchange_error_decode_fail" = "Données de taux de change récupérées non valides";
+"translate_error" = "Impossible d'obtenir la traduction";
+"translate_error_no_data" = "Aucune traduction récupérée";
+"translate_error_decode_fail" = "Les données de traduction récupérées ne sont pas valides";
+"weather_error" = "Impossible d'obtenir les données météos";
+"weather_error_first_city" = "Impossible d'obtenir les données météos de New York";
+"weather_error_no_data" = "Aucune donnée météo récupérée";
+"weather_error_decode_fail" = "Les données météos récupérées ne sont pas valides";
 "error_no_request" = "Requête non valide";
-"error_occured" = "Une erreur est survenue";
+"error_occurred" = "Une erreur est survenue";
 "error_no_data" = "Aucune donnée récupérée";
 "error_bad_response" = "Un problème est survenu lors de la récupération des données";
 "error_decode_fail" = "Données récupérées non valides";

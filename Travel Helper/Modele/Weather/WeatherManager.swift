@@ -9,17 +9,17 @@ import Foundation
 
 class WeatherManager {
     
-    private var service = APIService(session: URLSession(configuration: .default))
+    var weatherData = WeatherData()
     
-    init(session: URLSession? = nil) {
-        if let session = session {
-            service = APIService(session: session)
-        }
+    private var service: APIService
+    
+    init(service: APIService = APIService.shared) {
+        self.service = service
     }
     
-    func getWeather(location: WeatherData, completion: @escaping (_ result: JSONWeather?, _ error: Error?) -> Void) {
-        guard let requestData = getRequest(location: location) else {
-            completion(nil, APIService.ServiceError.noRequest)
+    func getWeather(completion: @escaping (_ result: JSONWeather?, _ error: Error?) -> Void) {
+        guard let requestData = getRequest() else {
+            completion(nil, ServiceError.noRequest)
             return
         }
         service.makeRequest(requestData: requestData) { data, error in
@@ -28,30 +28,29 @@ class WeatherManager {
                 return
             }
             guard let responseJSON = try? JSONDecoder().decode(JSONWeather.self, from: data) else {
-                completion(nil, APIService.ServiceError.decodeFail)
+                completion(nil, ServiceError.decodeFail)
                 return
             }
             completion(responseJSON, nil)
         }
     }
     
-    private func getRequest(location: WeatherData) -> RequestData? {
-        guard location.status != .invalid else { return nil }
+    private func getRequest() -> RequestData? {
+        guard weatherData.status != .invalid else { return nil }
         var body = [String: String]()
-        if location.status == .validCoord {
-            body["lat"] = String(location.lat!)
-            body["lon"] = String(location.lon!)
-        } else if location.status == .validName {
-            body["q"] = location.name
+        if weatherData.status == .validCoord {
+            body["lat"] = String(weatherData.lat!)
+            body["lon"] = String(weatherData.lon!)
+        } else if weatherData.status == .validName {
+            body["q"] = weatherData.name
         }
         body["appid"] = WEATHER_KEY
         body["units"] = "metric"
-        if location.lang == "fr" {
+        if weatherData.lang == "fr" {
             body["lang"] = "fr"
         } else {
             body["lang"] = "en"
         }
-        
         
         return RequestData(urlString: .weather, http: .get, body: body)
     }

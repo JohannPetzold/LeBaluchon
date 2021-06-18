@@ -14,7 +14,7 @@ class TranslateManagerTests: XCTestCase {
     let translateData = TranslateData(text: "Bonjour", source: "fr", target: "en")
     
     func testGetTranslateShouldGetErrorWhenNoTranslateData() {
-        let session = TranslateManager(session: URLSessionFake(data: nil, response: nil, error: FakeResponseData.error))
+        let session = TranslateManager(service: APIServiceMock(data: nil, error: nil))
         
         session.getTranslation { translation, error in
             XCTAssertNil(translation)
@@ -23,21 +23,7 @@ class TranslateManagerTests: XCTestCase {
     }
     
     func testGetTranslationShouldGetErrorWhenUsingError() {
-        let session = TranslateManager(session: URLSessionFake(data: nil, response: nil, error: FakeResponseData.error))
-        session.translateData = translateData
-        
-        let expectation = XCTestExpectation(description: "Wait for queue change")
-        session.getTranslation { translation, error in
-            XCTAssertNil(translation)
-            XCTAssertNotNil(error)
-            expectation.fulfill()
-        }
-        
-        wait(for: [expectation], timeout: 0.01)
-    }
-    
-    func testGetTranslationShouldGetErrorWhenUsingBadResponse() {
-        let session = TranslateManager(session: URLSessionFake(data: nil, response: FakeResponseData.responseKO, error: nil))
+        let session = TranslateManager(service: APIServiceMock(data: nil, error: ResponseDataMock.error))
         session.translateData = translateData
         
         let expectation = XCTestExpectation(description: "Wait for queue change")
@@ -51,7 +37,7 @@ class TranslateManagerTests: XCTestCase {
     }
     
     func testGetTranslationShouldGetErrorWhenUsingBadData() {
-        let session = TranslateManager(session: URLSessionFake(data: FakeResponseData.incorrectData, response: FakeResponseData.responseOK, error: nil))
+        let session = TranslateManager(service: APIServiceMock(data: ResponseDataMock.incorrectData, error: nil))
         session.translateData = translateData
         
         let expectation = XCTestExpectation(description: "Wait for queue change")
@@ -65,7 +51,7 @@ class TranslateManagerTests: XCTestCase {
     }
     
     func testGetTranslationShouldGetTranslationWhenUsingGoodData() {
-        let session = TranslateManager(session: URLSessionFake(data: FakeResponseData.correctData(filename: filename), response: FakeResponseData.responseOK, error: nil))
+        let session = TranslateManager(service: APIServiceMock(data: ResponseDataMock.correctData(filename: filename), error: nil))
         session.translateData = translateData
         
         let expectation = XCTestExpectation(description: "Wait for queue change")

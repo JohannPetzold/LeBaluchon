@@ -14,7 +14,8 @@ class APIServiceTests: XCTestCase {
     let filename = "Exchange"
 
     func testMakeRequestShouldGetErrorWhenUsingBadRequest() {
-        let service = APIService(session: URLSessionFake(data: nil, response: nil, error: nil))
+        let service = APIService(session: NetworkSessionMock(data: nil, response: nil, error: nil))
+//        let service = APIService(session: URLSessionFake(data: nil, response: nil, error: nil))
         
         let expectation = XCTestExpectation(description: "Wait for queue change")
         service.makeRequest(requestData: RequestData()) { data, error in
@@ -27,7 +28,7 @@ class APIServiceTests: XCTestCase {
     }
     
     func testMakeRequestShouldGetErrorWhenFakeError() {
-        let service = APIService(session: URLSessionFake(data: nil, response: nil, error: FakeResponseData.error))
+        let service = APIService(session: NetworkSessionMock(data: nil, response: nil, error: ResponseDataMock.error))
         
         let expectation = XCTestExpectation(description: "Wait for queue change")
         service.makeRequest(requestData: requestData) { data, error in
@@ -40,7 +41,7 @@ class APIServiceTests: XCTestCase {
     }
     
     func testMakeRequestShouldGetErrorWhenBadResponse() {
-        let service = APIService(session: URLSessionFake(data: FakeResponseData.correctData(filename: filename), response: FakeResponseData.responseKO, error: nil))
+        let service = APIService(session: NetworkSessionMock(data: ResponseDataMock.correctData(filename: filename), response: ResponseDataMock.responseKO, error: nil))
         
         let expectation = XCTestExpectation(description: "Wait for queue change")
         service.makeRequest(requestData: requestData) { data, error in
@@ -53,7 +54,7 @@ class APIServiceTests: XCTestCase {
     }
     
     func testMakeRequestShouldGetDataWhenBadData() {
-        let service = APIService(session: URLSessionFake(data: FakeResponseData.incorrectData, response: FakeResponseData.responseOK, error: nil))
+        let service = APIService(session: NetworkSessionMock(data: ResponseDataMock.incorrectData, response: ResponseDataMock.responseOK, error: nil))
         
         let expectation = XCTestExpectation(description: "Wait for queue change")
         service.makeRequest(requestData: requestData) { data, error in
@@ -66,7 +67,7 @@ class APIServiceTests: XCTestCase {
     }
     
     func testMakeRequestShouldGetDataWhenGoodDataAndResponse() {
-        let service = APIService(session: URLSessionFake(data: FakeResponseData.correctData(filename: filename), response: FakeResponseData.responseOK, error: nil))
+        let service = APIService(session: NetworkSessionMock(data: ResponseDataMock.correctData(filename: filename), response: ResponseDataMock.responseOK, error: nil))
         
         let expectation = XCTestExpectation(description: "Wait for queue change")
         service.makeRequest(requestData: requestData) { data, error in

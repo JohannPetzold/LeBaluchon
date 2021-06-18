@@ -13,7 +13,7 @@ class ExchangeManagerTests: XCTestCase {
     let filename = "Exchange"
     
     func testGetExchangeShouldGetErrorWhenUsingError() {
-        let session = ExchangeManager(session: URLSessionFake(data: nil, response: nil, error: FakeResponseData.error))
+        let session = ExchangeManager(service: APIServiceMock(data: nil, error: ResponseDataMock.error))
         
         let expectation = XCTestExpectation(description: "Wait for queue change")
         session.getExchange { success, error in
@@ -26,20 +26,7 @@ class ExchangeManagerTests: XCTestCase {
     }
     
     func testGetExchangeShouldGetErrorWhenUsingBadData() {
-        let session = ExchangeManager(session: URLSessionFake(data: FakeResponseData.incorrectData, response: FakeResponseData.responseOK, error: nil))
-        
-        let expectation = XCTestExpectation(description: "Wait for queue change")
-        session.getExchange { success, error in
-            XCTAssertFalse(success)
-            XCTAssertNotNil(error)
-            expectation.fulfill()
-        }
-        
-        wait(for: [expectation], timeout: 0.01)
-    }
-    
-    func testGetExchangeShouldGetErrorWhenUsingBadResponse() {
-        let session = ExchangeManager(session: URLSessionFake(data: FakeResponseData.incorrectData, response: FakeResponseData.responseKO, error: nil))
+        let session = ExchangeManager(service: APIServiceMock(data: ResponseDataMock.incorrectData, error: nil))
         
         let expectation = XCTestExpectation(description: "Wait for queue change")
         session.getExchange { success, error in
@@ -52,7 +39,7 @@ class ExchangeManagerTests: XCTestCase {
     }
     
     func testGetExchangeShouldGetSuccessWhenUsingGoodData() {
-        let session = ExchangeManager(session: URLSessionFake(data: FakeResponseData.correctData(filename: filename), response: FakeResponseData.responseOK, error: nil))
+        let session = ExchangeManager(service: APIServiceMock(data: ResponseDataMock.correctData(filename: filename), error: nil))
         
         let expectation = XCTestExpectation(description: "Wait for queue change")
         session.getExchange { success, error in
@@ -72,7 +59,7 @@ class ExchangeManagerTests: XCTestCase {
     }
     
     func testSwapCurrenciesShouldReturnResultIfGoodData() {
-        let session = ExchangeManager(session: URLSessionFake(data: FakeResponseData.correctData(filename: filename), response: FakeResponseData.responseOK, error: nil))
+        let session = ExchangeManager(service: APIServiceMock(data: ResponseDataMock.correctData(filename: filename), error: nil))
         
         let expectation = XCTestExpectation(description: "Wait for queue change")
         session.getExchange { success, error in

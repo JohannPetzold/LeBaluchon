@@ -8,9 +8,16 @@
 
 /* Error */
 "error_title" = "An error occurred";
-"exchange_service_error" = "Unable to get exchange rate";
-"translate_service_error" = "Unable to get translation";
-"weather_service_error" = "Unable to get weather data";
+"exchange_error" = "Unable to get exchange rate";
+"exchange_error_no_data" = "No exchange rate data";
+"exchange_error_decode_fail" = "No valid exchange rate data";
+"translate_error" = "Unable to get translation";
+"translate_error_no_data" = "No translation data recovered";
+"translate_error_decode_fail" = "No valid translation data";
+"weather_error" = "Unable to get weather data";
+"weather_error_first_city" = "Unable to get New York weather data";
+"weather_error_no_data" = "No weather data";
+"weather_error_decode_fail" = "No valid weather data";
 "error_no_request" = "Invalid request";
 "error_occurred" = "An error occurred";
 "error_no_data" = "No data";

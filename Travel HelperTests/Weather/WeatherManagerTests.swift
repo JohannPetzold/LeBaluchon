@@ -15,32 +15,20 @@ class WeatherManagerTests: XCTestCase {
     let weatherDataCoord = WeatherData(lon: -122.08, lat: 37.39)
     
     func testGetWeatherShouldGetErrorWhenNoWeatherData() {
-        let session = WeatherManager(session: URLSessionFake(data: nil, response: nil, error: FakeResponseData.error))
+        let session = WeatherManager(service: APIServiceMock(data: nil, error: nil))
         
-        session.getWeather(location: WeatherData()) { result, error in
+        session.getWeather() { result, error in
             XCTAssertNil(result)
             XCTAssertNotNil(error)
         }
     }
     
     func testGetWeatherShouldGetErrorWhenUsingError() {
-        let session = WeatherManager(session: URLSessionFake(data: nil, response: nil, error: FakeResponseData.error))
+        let session = WeatherManager(service: APIServiceMock(data: nil, error: ResponseDataMock.error))
         
+        session.weatherData = weatherData
         let expectation = XCTestExpectation(description: "Wait for queue change")
-        session.getWeather(location: weatherData) { result, error in
-            XCTAssertNil(result)
-            XCTAssertNotNil(error)
-            expectation.fulfill()
-        }
-        
-        wait(for: [expectation], timeout: 0.01)
-    }
-    
-    func testGetWeatherShouldGetErrorWhenUsingBadResponse() {
-        let session = WeatherManager(session: URLSessionFake(data: nil, response: FakeResponseData.responseKO, error: nil))
-        
-        let expectation = XCTestExpectation(description: "Wait for queue change")
-        session.getWeather(location: weatherData) { result, error in
+        session.getWeather() { result, error in
             XCTAssertNil(result)
             XCTAssertNotNil(error)
             expectation.fulfill()
@@ -50,10 +38,11 @@ class WeatherManagerTests: XCTestCase {
     }
     
     func testGetWeatherShouldGetErrorWhenUsingBadData() {
-        let session = WeatherManager(session: URLSessionFake(data: FakeResponseData.incorrectData, response: FakeResponseData.responseOK, error: nil))
+        let session = WeatherManager(service: APIServiceMock(data: ResponseDataMock.incorrectData, error: nil))
         
+        session.weatherData = weatherData
         let expectation = XCTestExpectation(description: "Wait for queue change")
-        session.getWeather(location: weatherData) { result, error in
+        session.getWeather() { result, error in
             XCTAssertNil(result)
             XCTAssertNotNil(error)
             expectation.fulfill()
@@ -63,10 +52,11 @@ class WeatherManagerTests: XCTestCase {
     }
     
     func testGetWeatherShouldGetResultWhenUsingGoodData() {
-        let session = WeatherManager(session: URLSessionFake(data: FakeResponseData.correctData(filename: filename), response: FakeResponseData.responseOK, error: nil))
-        
+        let session = WeatherManager(service: APIServiceMock(data: ResponseDataMock.correctData(filename: filename), error: nil))
+
+        session.weatherData = weatherData
         let expectation = XCTestExpectation(description: "Wait for queue change")
-        session.getWeather(location: weatherData) { result, error in
+        session.getWeather() { result, error in
             XCTAssertNotNil(result)
             XCTAssertNil(error)
             
@@ -79,10 +69,11 @@ class WeatherManagerTests: XCTestCase {
     }
     
     func testGetWeatherShouldGetResultWhenUsingGoodDataWithCoord() {
-        let session = WeatherManager(session: URLSessionFake(data: FakeResponseData.correctData(filename: filename), response: FakeResponseData.responseOK, error: nil))
+        let session = WeatherManager(service: APIServiceMock(data: ResponseDataMock.correctData(filename: filename), error: nil))
         
+        session.weatherData = weatherDataCoord
         let expectation = XCTestExpectation(description: "Wait for queue change")
-        session.getWeather(location: weatherDataCoord) { result, error in
+        session.getWeather() { result, error in
             XCTAssertNotNil(result)
             XCTAssertNil(error)
             

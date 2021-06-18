@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ExchangeViewController: UIViewController {
+class ExchangeViewController: MainViewController {
 
     @IBOutlet weak var amountTextField: UITextField!
     @IBOutlet weak var amountPickerView: UIPickerView!
@@ -40,8 +40,14 @@ extension ExchangeViewController {
                     self.exchangeCurrency()
                 }
             }
-            if error != nil {
-                let alertVC = self.makeAlertVC(message: Localize.exchangeError)
+            if let error = error as? ServiceError {
+                var errorMessage: String
+                switch error {
+                case .decodeFail: errorMessage = Localize.exchangeErrorDecodeFail
+                case .noData: errorMessage = Localize.exchangeErrorNoData
+                default: errorMessage = Localize.exchangeError
+                }
+                let alertVC = self.makeAlertVC(message: errorMessage)
                 self.present(alertVC, animated: true, completion: nil)
                 self.showErrorButton(true)
             }
@@ -52,26 +58,34 @@ extension ExchangeViewController {
 // MARK: - Exchange
 extension ExchangeViewController {
     
+    private func exchangeCurrency() {
+        guard let text = amountTextField.text else { return }
+        guard let amount = Double(text) else { resultLabel.text = ""; return }
+        let source = getCurrencyFromPicker(amountPickerView)!
+        let target = getCurrencyFromPicker(resultPickerView)!
+        exchange.swapCurrencies(amount: amount, source: source, target: target) { result in
+            resultLabel.text = String(format: "%.2f", result)
+        }
+    }
+    
+    private func getCurrencyFromPicker(_ picker: UIPickerView) -> Currencies? {
+        if picker == amountPickerView {
+            return Currencies.allCases[amountPickerView.selectedRow(inComponent: 0)]
+        } else if picker == resultPickerView {
+            return Currencies.allCases[Currencies.allCases.firstIndex(of: resultData[resultPickerView.selectedRow(inComponent: 0)])!]
+        }
+        return nil
+    }
+}
+
+// MARK: - Picker Currencies
+extension ExchangeViewController {
+    
     @IBAction func tappedSwapCurrencies(_ sender: UIButton) {
         swapPickerCurrencies()
         exchangeCurrency()
     }
     
-    /* resultData contient toutes les devises sauf celle choisie dans le premier picker */
-    private func updateResultData() {
-        resultData = Currencies.allCases.filter({ currency in
-            return currency != getCurrencyFromPicker(amountPickerView)
-        })
-    }
-    
-    /* Réinitialise l'affichage du resultPicker */
-    private func reloadResultPicker() {
-        updateResultData()
-        resultPickerView.reloadComponent(0)
-        resultPickerView.selectRow(0, inComponent: 0, animated: true)
-    }
-    
-    /* Echange les données des deux PickerView en respectant les index */
     private func swapPickerCurrencies() {
         let amountIndex = amountPickerView.selectedRow(inComponent: 0)
         let resultIndex = Currencies.allCases.firstIndex(of: resultData[resultPickerView.selectedRow(inComponent: 0)])!
@@ -84,23 +98,16 @@ extension ExchangeViewController {
         resultPickerView.selectRow(updateAmountIndex, inComponent: 0, animated: true)
     }
     
-    private func getCurrencyFromPicker(_ picker: UIPickerView) -> Currencies? {
-        if picker == amountPickerView {
-            return Currencies.allCases[amountPickerView.selectedRow(inComponent: 0)]
-        } else if picker == resultPickerView {
-            return Currencies.allCases[Currencies.allCases.firstIndex(of: resultData[resultPickerView.selectedRow(inComponent: 0)])!]
-        }
-        return nil
+    private func updateResultData() {
+        resultData = Currencies.allCases.filter({ currency in
+            return currency != getCurrencyFromPicker(amountPickerView)
+        })
     }
     
-    private func exchangeCurrency() {
-        guard let text = amountTextField.text else { return }
-        guard let amount = Double(text) else { resultLabel.text = ""; return }
-        let source = getCurrencyFromPicker(amountPickerView)!
-        let target = getCurrencyFromPicker(resultPickerView)!
-        exchange.swapCurrencies(amount: amount, source: source, target: target) { result in
-            resultLabel.text = String(format: "%.2f", result)
-        }
+    private func reloadResultPicker() {
+        updateResultData()
+        resultPickerView.reloadComponent(0)
+        resultPickerView.selectRow(0, inComponent: 0, animated: true)
     }
 }
 
@@ -135,7 +142,7 @@ extension ExchangeViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     }
 }
 
-// MARK: - TextField & Keyboard
+// MARK: - TextField
 extension ExchangeViewController: UITextFieldDelegate {
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -146,7 +153,6 @@ extension ExchangeViewController: UITextFieldDelegate {
         exchangeCurrency()
     }
     
-    /* Limite l'entrée de l'utilisateur à 1 . et 2 décimales */
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if string == "" {
             return true
@@ -166,6 +172,10 @@ extension ExchangeViewController: UITextFieldDelegate {
         }
         return true
     }
+}
+
+// MARK: - Keyboard
+extension ExchangeViewController {
     
     @IBAction func dismissKeyboard(_ sender: UITapGestureRecognizer) {
         amountTextField.resignFirstResponder()
@@ -185,23 +195,6 @@ extension ExchangeViewController: UITextFieldDelegate {
     @objc func hideKeyboard() {
         amountTextField.resignFirstResponder()
     }
-    
-    private func addKeyboardObservers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    @objc func keyboardWillShow(_ notification:Notification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue, view.frame.origin.y == 0 {
-            self.view.frame.origin.y -= keyboardSize.height / 2
-        }
-    }
-
-    @objc func keyboardWillHide(_ notification:Notification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue, view.frame.origin.y != 0 {
-            self.view.frame.origin.y += keyboardSize.height / 2
-        }
-    }
 }
 
 // MARK: - Error
@@ -213,11 +206,5 @@ extension ExchangeViewController {
     
     private func showErrorButton(_ show: Bool) {
         reloadButton.isHidden = !show
-    }
-    
-    private func makeAlertVC(message: String) -> UIAlertController {
-        let alertVC = UIAlertController(title: Localize.errorTitle, message: message, preferredStyle: .alert)
-        alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-        return alertVC
     }
 }

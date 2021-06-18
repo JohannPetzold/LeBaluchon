@@ -14,12 +14,10 @@ class ExchangeManager {
     private var rates: [Currencies: Double] = [:]
     private let fixerKeyParameter = "access_key"
     
-    private var service = APIService(session: URLSession(configuration: .default))
+    private var service: APIService
     
-    init(session: URLSession? = nil) {
-        if let session = session {
-            service = APIService(session: session)
-        }
+    init(service: APIService = APIService.shared) {
+        self.service = service
     }
     
     func getExchange(completion: @escaping (_ success: Bool, _ error: Error?) -> Void) {
@@ -30,7 +28,7 @@ class ExchangeManager {
                 return
             }
             guard let responseJSON = try? JSONDecoder().decode(JSONExchange.self, from: data) else {
-                completion(false, APIService.ServiceError.decodeFail)
+                completion(false, ServiceError.decodeFail)
                 return
             }
             self.updateExchange(exchangeData: responseJSON)

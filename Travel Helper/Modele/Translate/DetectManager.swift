@@ -11,17 +11,15 @@ class DetectManager {
     
     var detectData = DetectData()
     
-    private var service = APIService(session: URLSession(configuration: .default))
+    private var service: APIService
     
-    init(session: URLSession? = nil) {
-        if session != nil {
-            service = APIService(session: session!)
-        }
+    init(service: APIService = APIService.shared) {
+        self.service = service
     }
     
     func getDetection(completion: @escaping (_ language: String?, _ error: Error?) -> Void) {
         guard let requestData = getRequest() else {
-            completion(nil, APIService.ServiceError.noRequest)
+            completion(nil, ServiceError.noRequest)
             return
         }
         service.makeRequest(requestData: requestData) { data, error in
@@ -30,11 +28,11 @@ class DetectManager {
                 return
             }
             guard let responseJSON = try? JSONDecoder().decode(JSONDetect.self, from: data) else {
-                completion(nil, APIService.ServiceError.decodeFail)
+                completion(nil, ServiceError.decodeFail)
                 return
             }
             guard let language = responseJSON.data.detections.first?.first?.language else {
-                completion(nil, APIService.ServiceError.noData)
+                completion(nil, ServiceError.noData)
                 return
             }
             completion(language, nil)

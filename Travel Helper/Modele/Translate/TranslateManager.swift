@@ -11,17 +11,15 @@ class TranslateManager {
     
     var translateData = TranslateData()
     
-    private var service = APIService(session: URLSession(configuration: .default))
+    private var service: APIService
     
-    init(session: URLSession? = nil) {
-        if session != nil {
-            service = APIService(session: session!)
-        }
+    init(service: APIService = APIService.shared) {
+        self.service = service
     }
     
     func getTranslation(completion: @escaping (_ translation: String?, _ error: Error?) -> Void) {
         guard let requestData = getRequest() else {
-            completion(nil, APIService.ServiceError.noRequest)
+            completion(nil, ServiceError.noRequest)
             return
         }
         service.makeRequest(requestData: requestData) { data, error in
@@ -30,11 +28,11 @@ class TranslateManager {
                 return
             }
             guard let responseJSON = try? JSONDecoder().decode(JSONTranslate.self, from: data) else {
-                completion(nil, APIService.ServiceError.decodeFail)
+                completion(nil, ServiceError.decodeFail)
                 return
             }
             guard let translation = responseJSON.data.translations.first?.translatedText else {
-                completion(nil, APIService.ServiceError.noData)
+                completion(nil, ServiceError.noData)
                 return
             }
             completion(translation, nil)

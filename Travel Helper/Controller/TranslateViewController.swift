@@ -42,6 +42,8 @@ extension TranslateViewController {
         getTranslation()
     }
     
+    /* Get translation from the API
+     If error, present the AlertController */
     private func getTranslation() {
         showActivityIndicator()
         manager.getTranslation { [weak self] translation, error in
@@ -68,6 +70,7 @@ extension TranslateViewController {
 // MARK: - Detect
 extension TranslateViewController {
     
+    /* Get the lang detection from the API and modify the source and target */
     private func getDetection(text: String) {
         if text != "" {
             detectManager.detectData.text = text
@@ -99,6 +102,7 @@ extension TranslateViewController {
         swapSourceTarget()
     }
     
+    /* Swap source and target datas and images */
     private func swapSourceTarget() {
         if manager.translateData.source == "fr" {
             sourceFlag.image = UIImage(named: "en")
@@ -139,6 +143,7 @@ extension TranslateViewController {
 // MARK: - TextField
 extension TranslateViewController: UITextFieldDelegate {
     
+    /* Get Translation on return */
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField.text != nil && textField.text != "" {
             manager.translateData.text = textField.text
@@ -147,6 +152,7 @@ extension TranslateViewController: UITextFieldDelegate {
         return textField.resignFirstResponder()
     }
     
+    /* Get detection on change if activated */
     func textFieldDidChangeSelection(_ textField: UITextField) {
         if textField.text != "" && detectSwitch.isOn {
             getDetection(text: textField.text!)

@@ -17,6 +17,8 @@ class DetectManager {
         self.service = service
     }
     
+    /* Get data or error from makeRequest
+     Use data to instance JSONDetect */
     func getDetection(completion: @escaping (_ language: String?, _ error: Error?) -> Void) {
         guard let requestData = getRequest() else {
             completion(nil, ServiceError.noRequest)
@@ -39,6 +41,7 @@ class DetectManager {
         }
     }
     
+    /* Make an instance of RequestData */
     private func getRequest() -> RequestData? {
         guard detectData.status == .valid else { return nil }
         var body = [String: String]()

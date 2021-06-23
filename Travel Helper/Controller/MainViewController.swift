@@ -17,6 +17,7 @@ class MainViewController: UIViewController {
         overrideUserInterfaceStyle = .light
     }
 
+    /* Add Observers to modify the view when keyboard appear or disappear */
     func addKeyboardObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -34,6 +35,7 @@ class MainViewController: UIViewController {
         }
     }
     
+    /* Return an UIAlertController with the Localize error title and a unique OK button */
     func makeAlertVC(message: String) -> UIAlertController {
         let alertVC = UIAlertController(title: Localize.errorTitle, message: message, preferredStyle: .alert)
         alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))

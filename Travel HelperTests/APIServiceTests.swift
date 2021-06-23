@@ -15,7 +15,6 @@ class APIServiceTests: XCTestCase {
 
     func testMakeRequestShouldGetErrorWhenUsingBadRequest() {
         let service = APIService(session: NetworkSessionMock(data: nil, response: nil, error: nil))
-//        let service = APIService(session: URLSessionFake(data: nil, response: nil, error: nil))
         
         let expectation = XCTestExpectation(description: "Wait for queue change")
         service.makeRequest(requestData: RequestData()) { data, error in

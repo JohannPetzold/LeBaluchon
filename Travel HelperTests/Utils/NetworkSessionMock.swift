@@ -8,6 +8,7 @@
 import Foundation
 @testable import Travel_Helper
 
+/* Mock NetworkSession to return custom datas on completion */
 class NetworkSessionMock: NetworkSession {
     var data: Data?
     var response: URLResponse?

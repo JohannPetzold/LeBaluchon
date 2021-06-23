@@ -17,6 +17,8 @@ class TranslateManager {
         self.service = service
     }
     
+    /* Use data or error from makeRequest
+     data is decode in JSONTranslate instance */
     func getTranslation(completion: @escaping (_ translation: String?, _ error: Error?) -> Void) {
         guard let requestData = getRequest() else {
             completion(nil, ServiceError.noRequest)
@@ -39,6 +41,7 @@ class TranslateManager {
         }
     }
     
+    /* Create an instance of RequestData with */
     private func getRequest() -> RequestData? {
         guard translateData.status == .valid else { return nil }
         var body = [String: String]()

@@ -46,6 +46,9 @@ class WeatherViewController: MainViewController {
 // MARK: - Service
 extension WeatherViewController {
     
+    /* Get weather datas for first city
+     If atStart is true, get weather datas for user city
+     If error, present an AlertController */
     private func getCityWeather(atStart: Bool) {
         weatherManager.weatherData.name = "New York"
         weatherManager.getWeather() { [weak self] data, error in
@@ -71,11 +74,14 @@ extension WeatherViewController {
         }
     }
     
+    /* Get weather for user city if location is available */
     private func getCurrentCityAtStart() {
         guard let location = locManager.location?.coordinate else { return }
         getWeatherFromCoord(location: location)
     }
     
+    /* Get weather datas for user city using WeatherData instance in manager
+     If error, present an AlertController*/
     private func getCurrentCityWeather() {
         weatherManager.getWeather() { [weak self] data, error in
             guard let self = self else { return }
@@ -101,6 +107,7 @@ extension WeatherViewController {
         }
     }
     
+    /* Use getCurrentCityWeather with WeatherData from textField */
     private func getWeatherFromText() {
         if cityTextField.text != "" {
             weatherManager.weatherData = WeatherData(name: cityTextField.text)
@@ -108,6 +115,7 @@ extension WeatherViewController {
         }
     }
     
+    /* Use getCurrentCityWeather with WeatherData from location coordinate */
     private func getWeatherFromCoord(location: CLLocationCoordinate2D) {
         weatherManager.weatherData = WeatherData(lon: location.longitude, lat: location.latitude)
         getCurrentCityWeather()
@@ -121,6 +129,7 @@ extension WeatherViewController {
         dateLabel.text = Date().dateString()
     }
     
+    /* Change UI datas with JSONWeather properties */
     private func changeFirstCityLabels(data: JSONWeather) {
         cityNameLabel1.text = data.name
         tempLabel1.text = "\(Int(data.main.temp))°c"
@@ -132,6 +141,7 @@ extension WeatherViewController {
         iconDescription1.isHidden = false
     }
     
+    /* Change UI datas with JSONWeather properties */
     private func changeSecondCityLabels(data: JSONWeather) {
         cityNameLabel2.text = data.name
         tempLabel2.text = "\(Int(data.main.temp))°c"
@@ -165,6 +175,7 @@ extension WeatherViewController {
 // MARK: - Locate Button
 extension WeatherViewController {
     
+    /* Ask authorization if notDetermined yet, or use location coordinate to get weather for user's current city */
     @IBAction func tappedLocate(_ sender: UIButton) {
         if CLLocationManager.authorizationStatus() == .notDetermined {
             locManager.requestWhenInUseAuthorization()
@@ -174,6 +185,7 @@ extension WeatherViewController {
         }
     }
     
+    /* Modify the appearance of the LocateButton */
     private func changeStateLocateButton() {
         if CLLocationManager.authorizationStatus() == .denied {
             locateButton.isEnabled = false
@@ -211,6 +223,7 @@ extension WeatherViewController: CLLocationManagerDelegate {
         
     }
     
+    /* When the authorization is modified, update location and get current city weather if location available */
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         startUpdatingLocation()
         if locManager.location != nil {

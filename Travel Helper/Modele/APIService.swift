@@ -18,6 +18,7 @@ class APIService {
         self.session = session
     }
     
+    /* This method will call a dataTask with the request you want and return data or error */
     func makeRequest(requestData: RequestData, completion: @escaping (_ result: Data?, _ error: Error?) -> Void) {
         guard let request = createRequest(requestData: requestData) else {
             completion(nil, ServiceError.noRequest)
@@ -39,6 +40,7 @@ class APIService {
         })
     }
     
+    /* Create an URLRequest from RequestData */
     private func createRequest(requestData: RequestData) -> URLRequest? {
         if requestData.status == .valid {
             if var components = URLComponents(string: requestData.urlString!.rawValue) {

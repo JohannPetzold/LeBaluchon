@@ -7,6 +7,7 @@
 
 import Foundation
 
+/* To use a new LocalizedString, add a stored property with the corresponding Localizable key from Localizable.strings */
 class Localize {
     
     static var errorTitle: String {

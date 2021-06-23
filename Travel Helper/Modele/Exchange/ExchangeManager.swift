@@ -20,6 +20,8 @@ class ExchangeManager {
         self.service = service
     }
     
+    /* Get data from APIService's makeRequest and decode it using JSONExchange
+     or get error and return it using completion */
     func getExchange(completion: @escaping (_ success: Bool, _ error: Error?) -> Void) {
         let requestData = getRequest()
         service.makeRequest(requestData: requestData) { data, error in
@@ -36,6 +38,7 @@ class ExchangeManager {
         }
     }
     
+    /* Do the math using Currencies source and target values */
     func swapCurrencies(amount: Double, source: Currencies, target: Currencies, completion: (Double) -> Void) {
         guard exchangeJson != nil else { return }
         guard rates[source] != nil, rates[target] != nil else { return }
@@ -44,15 +47,13 @@ class ExchangeManager {
         completion(result)
     }
     
+    /* Store JSONExchange datas from getExchange and getRates */
     private func updateExchange(exchangeData: JSONExchange) {
         self.exchangeJson = exchangeData
         self.getRates()
     }
     
-    private func getRequest() -> RequestData {
-        return RequestData(urlString: .exchange, http: .get, body: [fixerKeyParameter: EXCHANGE_KEY])
-    }
-    
+    /* Store rates using JSONExchange datas */
     private func getRates() {
         guard exchangeJson != nil else { return }
         let jsonRates = exchangeJson!.rates
@@ -70,4 +71,11 @@ class ExchangeManager {
             }
         }
     }
+    
+    /* Make RequestData for the Exchange API (Fixer) */
+    private func getRequest() -> RequestData {
+        return RequestData(urlString: .exchange, http: .get, body: [fixerKeyParameter: EXCHANGE_KEY])
+    }
+    
+    
 }

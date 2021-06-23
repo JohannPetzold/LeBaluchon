@@ -17,6 +17,8 @@ class WeatherManager {
         self.service = service
     }
     
+    /* Get data or error from makeRequest
+     Use data to get an instance of JSONWeather */
     func getWeather(completion: @escaping (_ result: JSONWeather?, _ error: Error?) -> Void) {
         guard let requestData = getRequest() else {
             completion(nil, ServiceError.noRequest)

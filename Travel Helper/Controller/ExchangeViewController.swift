@@ -21,7 +21,7 @@ class ExchangeViewController: MainViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        addButtonToKeyboard(title: Localize.buttonClose)
+        addButtonToKeyboard()
         addKeyboardObservers()
         getService()
         updateResultData()
@@ -31,6 +31,8 @@ class ExchangeViewController: MainViewController {
 // MARK: - Service
 extension ExchangeViewController {
     
+    /* Get data needed from the API
+     If an error occurred, present the AlertController */
     private func getService() {
         exchange.getExchange { [weak self] success, error in
             guard let self = self else { return }
@@ -58,6 +60,7 @@ extension ExchangeViewController {
 // MARK: - Exchange
 extension ExchangeViewController {
     
+    /* Do the math with parameters needed for swapCurrencies method and display it */
     private func exchangeCurrency() {
         guard let text = amountTextField.text else { return }
         guard let amount = Double(text) else { resultLabel.text = ""; return }
@@ -68,6 +71,7 @@ extension ExchangeViewController {
         }
     }
     
+    /* Return the selected Currencies from the PickerView in parameter */
     private func getCurrencyFromPicker(_ picker: UIPickerView) -> Currencies? {
         if picker == amountPickerView {
             return Currencies.allCases[amountPickerView.selectedRow(inComponent: 0)]
@@ -86,6 +90,7 @@ extension ExchangeViewController {
         exchangeCurrency()
     }
     
+    /* Swap pickers selectRow and ResultPicker datas*/
     private func swapPickerCurrencies() {
         let amountIndex = amountPickerView.selectedRow(inComponent: 0)
         let resultIndex = Currencies.allCases.firstIndex(of: resultData[resultPickerView.selectedRow(inComponent: 0)])!
@@ -98,6 +103,7 @@ extension ExchangeViewController {
         resultPickerView.selectRow(updateAmountIndex, inComponent: 0, animated: true)
     }
     
+    /* Get Currencies minus the one from the amountPickerView */
     private func updateResultData() {
         resultData = Currencies.allCases.filter({ currency in
             return currency != getCurrencyFromPicker(amountPickerView)
@@ -153,6 +159,8 @@ extension ExchangeViewController: UITextFieldDelegate {
         exchangeCurrency()
     }
     
+    /* Stop the textField editing if wrong value are entered
+     Conform to a number representation with 2 digits */
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if string == "" {
             return true
@@ -181,12 +189,13 @@ extension ExchangeViewController {
         amountTextField.resignFirstResponder()
     }
     
-    private func addButtonToKeyboard(title: String) {
+    /* Add a ToolBar on Keyboard with a Close button */
+    private func addButtonToKeyboard() {
         let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 35))
         
         toolbar.items = [
             UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: self, action: nil),
-            UIBarButtonItem(title: title, style: UIBarButtonItem.Style.done, target: textField, action: #selector(hideKeyboard))
+            UIBarButtonItem(title: Localize.buttonClose, style: UIBarButtonItem.Style.done, target: textField, action: #selector(hideKeyboard))
         ]
         toolbar.sizeToFit()
         amountTextField.inputAccessoryView = toolbar
